@@ -99,33 +99,33 @@ void compound_control()
 	vxd = rc_ctrl.rc.ch[0];
 	vyd = rc_ctrl.rc.ch[1];
 	
-	if(w_flag)
+	if(a_flag)
 	{
-		vxd = 1000;
+		vxd = 100;
 	
 	}
-	else if(s_flag)
+	else if(d_flag)
 	{
-		vxd = -1000;
+		vxd = -100;
 	
 	}
-		else{
+		else if (!a_flag&&!d_flag&&rc_ctrl.rc.ch[0] == 0){
 	vxd = 0;
 
 	}
 	
-	if(a_flag)
+	if(w_flag)
 	{
-		vyd = 1000;
+		vyd = 100;
 		
 	}
-	else if(d_flag)
+	else if(s_flag)
 	{
-		vyd = -1000;
+		vyd = -100;
 	}
-	else{
+else if (!w_flag&&!s_flag&&rc_ctrl.rc.ch[0] == 0){
+	vyd = 0;
 
-		vyd = 0;
 	}
 	if(shift_flag)
 	{
@@ -145,7 +145,7 @@ void compound_control()
 	vyd = rc_ctrl.rc.ch[1];
 	yaw_err += 0.01916; 
 	}
-	 if(rc_ctrl.rc.s[0]==3){
+	 if(rc_ctrl.rc.s[0]==3&&!shift_flag){
 	
 	
 	omega = 0;}
