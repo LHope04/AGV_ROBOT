@@ -337,6 +337,11 @@
           <WinNumber>2</WinNumber>
           <ItemText>rx_buff_sj</ItemText>
         </Ww>
+        <Ww>
+          <count>20</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>mouse_y,0x0A</ItemText>
+        </Ww>
       </WatchWindow2>
       <Tracepoint>
         <THDelay>0</THDelay>

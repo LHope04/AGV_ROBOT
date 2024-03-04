@@ -18,6 +18,7 @@
 #include "motion_overlay.h"
 #include "channel_changes.h"
 #include "INS_task.h"
+#include "usbd_cdc.h"
 
 
 extern int Up_ins_yaw;
@@ -28,7 +29,7 @@ extern up_data UpData; //上C板数据
 extern int16_t motor_angle[4]; //6020角度 在motion_overlay.c中计算 作为全局变量
 extern int16_t motor_speed[4]; //3508速度
 extern int omega; 
-
+		uint8_t Buf1[10];
 uint16_t initial_angle[4];
 int16_t Max_out_a = 20000;
 int16_t Max_iout_a = 20000;
@@ -47,7 +48,7 @@ void Yaw_Diff()
 	error_theta = UpData.yaw_up - INS_angle[0]+yaw_err; 
 	error_theta = error_theta*3.1415926/180; //转化为弧度制
 }
-
+USBD_HandleTypeDef axy;
 void Chassis(void const * argument)
 {
 	float PID_s[3] = {10,0.05,0};
@@ -61,7 +62,7 @@ void Chassis(void const * argument)
 		pid_init(&PID_angle[i],PID_a[0],PID_a[1],PID_a[2]);
 		pid_init(&PID_speed_3508[i],PID[0],PID[1],PID[2]);
 	}
-	
+	USBD_CDC_SetRxBuffer(&axy,Buf1);
   for(;;)
   {
 //**************************************读取6020初始角度**************************************//
@@ -90,7 +91,10 @@ void Chassis(void const * argument)
 		//具体实现方式在"motion_overlay.c"
 
 			compound_control(); //旋转加平移运动
-			
+
+
+			//CDC_Transmit_FS(&Buf1, 10);
+		
 		
 		//can_cmd_send_6020_2(10000,1000,1000,1000);
     osDelay(10);

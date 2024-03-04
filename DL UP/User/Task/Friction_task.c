@@ -57,7 +57,7 @@ void Friction_task(void const * argument)
 //		}
 		if(rc_ctrl.rc.s[1] == 1)
 		{
-			if(shoot)
+			if(shoot||press_left)
 			{
 			target_speed_can_2[1]=-19*300;//258
 	target_speed_can_2[2]=19*300;
@@ -70,7 +70,7 @@ void Friction_task(void const * argument)
 	target_speed_can_2[2]=0;
 			}
 		}
-		else if(rc_ctrl.rc.s[1] == 3||shoot)
+		else if(rc_ctrl.rc.s[1] == 3||shoot||press_left)
 		{
 //			target_speed_can_2[1]=19*310;//258
 //	target_speed_can_2[2]=-19*310;
@@ -80,7 +80,7 @@ void Friction_task(void const * argument)
 		
 
 		}
-	else	if(rc_ctrl.rc.s[1] == 2||shoot)
+	else	if(rc_ctrl.rc.s[1] == 2||shoot||press_left)
 		{
 		bopan_s = -30*36;}
 		else

@@ -2,7 +2,7 @@ chassis\yaw_task.o: yaw_task.c
 chassis\yaw_task.o: ../USER/PotocaLayer/rc_potocal.h
 chassis\yaw_task.o: ../USER/struct_typedef.h
 chassis\yaw_task.o: ../USER/DriverLayer/drv_can.h
-chassis\yaw_task.o: ..\USER\Task\chassis.h
+chassis\yaw_task.o: ../USER/Task/chassis.h
 chassis\yaw_task.o: ../Core/Inc/can.h
 chassis\yaw_task.o: ../Core/Inc/main.h
 chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
@@ -40,8 +40,11 @@ chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
 chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-chassis\yaw_task.o: ..\USER\Task\chassis.h
+chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
+chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
+chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\yaw_task.o: ../USER/Task/chassis.h
 chassis\yaw_task.o: ../Core/Inc/yaw_task.h
-chassis\yaw_task.o: ..\USER\Task\INS_Task\ins_task\pid.h
+chassis\yaw_task.o: ../USER/Task/INS_Task/ins_task/pid.h
 chassis\yaw_task.o: ../Core/Inc/yaw_task.h
 chassis\yaw_task.o: ../USER/DriverLayer/user_can.h

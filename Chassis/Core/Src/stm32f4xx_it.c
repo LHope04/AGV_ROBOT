@@ -25,6 +25,7 @@
 #include "drv_usart.h"
 #include "chassis.h"
 #include "INS_task.h"
+#include "usbd_cdc_if.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,6 +65,7 @@ uint16_t test_count = 0;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
 extern DMA_HandleTypeDef hdma_spi1_tx;
@@ -418,6 +420,21 @@ void CAN2_RX0_IRQHandler(void)
   /* USER CODE BEGIN CAN2_RX0_IRQn 1 */
 
   /* USER CODE END CAN2_RX0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USB On The Go FS global interrupt.
+  */
+uint8_t rxt[10];
+void OTG_FS_IRQHandler(void)
+{
+  /* USER CODE BEGIN OTG_FS_IRQn 0 */
+//CDC_Receive_FS(rxt,10);
+  /* USER CODE END OTG_FS_IRQn 0 */
+  HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
+  /* USER CODE BEGIN OTG_FS_IRQn 1 */
+
+  /* USER CODE END OTG_FS_IRQn 1 */
 }
 
 /**

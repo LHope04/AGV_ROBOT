@@ -41,6 +41,7 @@ extern int8_t errt;
 extern float yaw_send;
 //前馈控制变量
 int16_t Rotate_w;
+
 int16_t Rotate_W;
 int angle_pause = 0;
 int yaw_a = 0;
@@ -55,6 +56,7 @@ int yaw_a = 0;
 #define base_min 364
 #define angle_valve 1		//角度阈值，在这个范围内就不去抖动了
 #define mouse_x_valve 10
+#define mouse_y_valve 10
 #define mouse_x_weight 0.5f
 #define Yaw_minipc_valve 1
 #define Yaw_minipc_weight 1.0f
@@ -127,7 +129,7 @@ void Yaw_angle_task(void const *pvParameters)
 		diy_control();
 		//模式判断,左上角开关开到最下方
 			Yaw_angle_mode_2();
-		if((rc_ctrl.rc.s[1] == 3||rc_ctrl.rc.s[1] == 2)&&recv.cheak)
+		if((rc_ctrl.rc.s[1] == 3||rc_ctrl.rc.s[1] == 2||press_right)&&recv.cheak)
 				{
 
 					Yaw_minipc_control();
@@ -147,6 +149,16 @@ void Yaw_angle_task(void const *pvParameters)
 }
 void pitch_cal()
 {
+	if(target_angleyaw > 180)
+	{
+	target_angleyaw -= 360;
+	
+	}
+		if(target_angleyaw < -180)
+	{
+	target_angleyaw += 360;
+	
+	}
 					target_speed[5] = pid_calc1(&angle_pid,target_angleyaw,ins_yaw);
 
 
@@ -206,11 +218,14 @@ static void Yaw_init()
 static void Yaw_angle_init()	
 {
 	//id为can1的5号
-	pid_init(&motor_pid[5],700,5,0,15000,20000);//85,7,5//110,1,40,15000,15000
-	pid_init(&angle_pid,4,0,10,15000,20000);//85,7,5//110,1,40,15000,15000
-		pid_init(&motor_pid_gimbal_a[0],4,0,10,15000,30000);//85,7,5//110,1,40,15000,15000
-	pid_init(&motor_pid_gimbal_s[0],600,0.5,0,15000,30000);//85,7,5//110,1,40,15000,15000
-	
+//	pid_init(&motor_pid[5],700,5,0,15000,20000);//85,7,5//110,1,40,15000,15000
+//	pid_init(&angle_pid,5,0,10,15000,20000);//85,7,5//110,1,40,15000,15000
+		pid_init(&motor_pid[5],300,5,0,15000,20000);//85,7,5//110,1,40,15000,15000
+	pid_init(&angle_pid,3,0,10,15000,20000);//85,7,5//110,1,40,15000,15000
+//		pid_init(&motor_pid_gimbal_a[0],5,0,10,15000,30000);//85,7,5//110,1,40,15000,15000
+//	pid_init(&motor_pid_gimbal_s[0],800,5,0,15000,30000);//85,7,5//110,1,40,15000,15000
+			pid_init(&motor_pid_gimbal_a[0],3,0,10,15000,30000);//85,7,5//110,1,40,15000,15000
+pid_init(&motor_pid_gimbal_s[0],400,5,0,15000,30000);//85,7,5//110,1,40,15000,15000
 	
 }
 
@@ -399,7 +414,13 @@ static void Yaw_angle_mouse()
 	{
 		yaw_model_flag = 1;
 		target_angleyaw -= (fp32)mouse_x * 0.002;
-		pitch_target -= (fp32)mouse_y * 0.002;
+
+	}
+		if(mouse_y < -mouse_y_valve || mouse_y > mouse_y_valve)
+	{
+		yaw_model_flag = 1;
+
+		pitch_target -= (fp32)mouse_y * 0.002;//up - down +
 	}
 }
 
@@ -532,6 +553,7 @@ static void Yaw_angle_mode_2()
 	else if( (rc_ctrl.rc.ch[2] >= base_min && rc_ctrl.rc.ch[2]<base - valve ) || (q_flag) )
 	{
 		target_angleyaw += 0.3;
+		
 		yaw_model_flag = 1;
 	}
 					if(rc_ctrl.rc.ch[3] > base-valve && rc_ctrl.rc.ch[3] < base+valve && (!q_flag) && (!e_flag) && (mouse_x < mouse_x_valve) && (mouse_x > -mouse_x_valve) && (!press_right))
@@ -551,10 +573,7 @@ static void Yaw_angle_mode_2()
 				}
 	Yaw_angle_mouse();
 					//右键触发自瞄
-	if(press_right)
-	{
-		Yaw_minipc_control();
-	}
+
 
 
 }

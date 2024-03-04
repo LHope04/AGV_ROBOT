@@ -52,10 +52,7 @@ extern CAN_HandleTypeDef hcan2;
 
 void MX_CAN1_Init(void);
 void MX_CAN2_Init(void);
-void mt6020_send(uint8_t id_range,int16_t v1,int16_t v2,int16_t v3,int16_t v4);
-void mt3508_send(uint8_t id_range,int16_t v1,int16_t v2,int16_t v3,int16_t v4);
-void gb6020_send(uint8_t id_range,int16_t v1,int16_t v2,int16_t v3,int16_t v4);
-  void mt3508_send_can2(uint8_t id_range,int16_t v1,int16_t v2,int16_t v3,int16_t v4);
+
 /* USER CODE BEGIN Prototypes */
 
 /* USER CODE END Prototypes */
