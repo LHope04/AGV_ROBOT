@@ -40,3 +40,6 @@ chassis\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\pid.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\pid.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\pid.o: ../Core/Inc/usart.h
+chassis\pid.o: ../Core/Inc/main.h

@@ -72,6 +72,7 @@ osThreadId yawangleTaskHandle;
 
 void StartINSTask(void const * argument);
 
+extern void MX_USB_DEVICE_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /* GetIdleTaskMemory prototype (linked to static allocation support) */
@@ -176,6 +177,8 @@ void MX_FREERTOS_Init(void) {
 /* USER CODE END Header_StartINSTask */
 void StartINSTask(void const * argument)
 {
+  /* init code for USB_DEVICE */
+  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN StartINSTask */
     INS_Init();
     /* Infinite loop */

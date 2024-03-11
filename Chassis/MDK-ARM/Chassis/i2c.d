@@ -39,3 +39,6 @@ chassis\i2c.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\i2c.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\i2c.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\i2c.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\i2c.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\i2c.o: ../Core/Inc/usart.h
+chassis\i2c.o: ../Core/Inc/main.h

@@ -25,6 +25,7 @@
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
+#include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -151,7 +152,6 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-
   HAL_Init();
 
   /* USER CODE BEGIN Init */
@@ -184,6 +184,11 @@ int main(void)
 		  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
 	HAL_UART_Receive_DMA(&huart1, rx_buff_sj, 100);
 	HAL_TIM_PWM_Start(&htim10,TIM_CHANNEL_1);
+
+		HAL_TIM_PWM_Init(&htim1);
+		HAL_TIM_Base_Start_IT(&htim1);
+	HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+	__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1,3000);
 	//ist8310_init();
 	HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);//修改TIM2中断优先级
 	can_1_user_init(&hcan1);//配置can1的过滤器
@@ -197,10 +202,11 @@ int main(void)
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
- MX_FREERTOS_Init();
+  MX_FREERTOS_Init();
 
   /* Start scheduler */
   osKernelStart();
+
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

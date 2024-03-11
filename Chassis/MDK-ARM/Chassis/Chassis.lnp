@@ -74,7 +74,7 @@
 "chassis\usbd_ctlreq.o"
 "chassis\usbd_ioreq.o"
 "chassis\usbd_cdc.o"
---strict --scatter "Chassis\Chassis.sct"
+--library_type=microlib --strict --scatter "Chassis\Chassis.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list "Chassis.map" -o Chassis\Chassis.axf

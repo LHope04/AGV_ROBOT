@@ -46,6 +46,9 @@ chassis\chassis.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\chassis.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\chassis.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\chassis.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\chassis.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\chassis.o: ../Core/Inc/usart.h
+chassis\chassis.o: ../Core/Inc/main.h
 chassis\chassis.o: ../USER/struct_typedef.h
 chassis\chassis.o: ../USER/Task/chassis.h
 chassis\chassis.o: ../Core/Inc/can.h
@@ -68,7 +71,6 @@ chassis\chassis.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd
 chassis\chassis.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
 chassis\chassis.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h
 chassis\chassis.o: ../USB_DEVICE/Target/usbd_conf.h
-chassis\chassis.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
 chassis\chassis.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdlib.h
 chassis\chassis.o: C:\Keil_v5\ARM\Installer\Bin\..\include\string.h
 chassis\chassis.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h

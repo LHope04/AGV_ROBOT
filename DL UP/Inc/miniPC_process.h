@@ -52,8 +52,8 @@ typedef enum {
 
 /* ??????? */
 typedef enum {
-    VISION_DETECT_COLOR_RED  = 0u,
-    VISION_DETECT_COLOR_BLUE = 1u,
+    VISION_DETECT_COLOR_RED  = 1u,
+    VISION_DETECT_COLOR_BLUE = 2u,
 } VISION_DETECT_COLOR_e;
 
 /* ???????????? */

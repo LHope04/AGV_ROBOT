@@ -55,8 +55,8 @@ int yaw_a = 0;
 #define base_max 1684		
 #define base_min 364
 #define angle_valve 1		//角度阈值，在这个范围内就不去抖动了
-#define mouse_x_valve 10
-#define mouse_y_valve 10
+#define mouse_x_valve 0.1
+#define mouse_y_valve 0.1
 #define mouse_x_weight 0.5f
 #define Yaw_minipc_valve 1
 #define Yaw_minipc_weight 1.0f
@@ -159,7 +159,7 @@ void pitch_cal()
 	target_angleyaw += 360;
 	
 	}
-					target_speed[5] = pid_calc1(&angle_pid,target_angleyaw,ins_yaw);
+					target_speed[5] += pid_calc1(&angle_pid,target_angleyaw,ins_yaw);
 
 
 		motor_info[5].set_voltage = pid_calc(&motor_pid[5], target_speed[5],19.8f*ins_gyro );
@@ -218,10 +218,12 @@ static void Yaw_init()
 static void Yaw_angle_init()	
 {
 	//id为can1的5号
-//	pid_init(&motor_pid[5],700,5,0,15000,20000);//85,7,5//110,1,40,15000,15000
-//	pid_init(&angle_pid,5,0,10,15000,20000);//85,7,5//110,1,40,15000,15000
-		pid_init(&motor_pid[5],300,5,0,15000,20000);//85,7,5//110,1,40,15000,15000
-	pid_init(&angle_pid,3,0,10,15000,20000);//85,7,5//110,1,40,15000,15000
+	pid_init(&motor_pid[5],700,5,0,15000,20000);//85,7,5//110,1,40,15000,15000
+	pid_init(&angle_pid,5,0,10,15000,20000);//85,7,5//110,1,40,15000,15000
+//		pid_init(&motor_pid[5],300,3,0,15000,20000);//85,7,5//110,1,40,15000,15000
+//	pid_init(&angle_pid,2,0,10,15000,20000);//85,7,5//110,1,40,15000,15000
+		//pid_init(&motor_pid[5],100,5,0,18000,20000);//85,7,5//110,1,40,15000,15000
+	//pid_init(&angle_pid,7,0,400,18000,20000);//85,7,5//110,1,40,15000,15000
 //		pid_init(&motor_pid_gimbal_a[0],5,0,10,15000,30000);//85,7,5//110,1,40,15000,15000
 //	pid_init(&motor_pid_gimbal_s[0],800,5,0,15000,30000);//85,7,5//110,1,40,15000,15000
 			pid_init(&motor_pid_gimbal_a[0],3,0,10,15000,30000);//85,7,5//110,1,40,15000,15000
@@ -410,12 +412,13 @@ static void Yaw_mouse()
 }
 static void Yaw_angle_mouse()
 {
-	if(mouse_x > mouse_x_valve || mouse_x < -mouse_x_valve)
-	{
-		yaw_model_flag = 1;
-		target_angleyaw -= (fp32)mouse_x * 0.002;
 
-	}
+		yaw_model_flag = 1;
+		target_angleyaw -=  (rc_ctrl.mouse.x / 16384.00 * 200);
+
+	
+//	if(mouse_x < -mouse_x_valve)
+//	{target_angleyaw +=  1;}
 		if(mouse_y < -mouse_y_valve || mouse_y > mouse_y_valve)
 	{
 		yaw_model_flag = 1;

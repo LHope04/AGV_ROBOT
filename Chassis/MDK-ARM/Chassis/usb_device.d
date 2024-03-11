@@ -44,6 +44,8 @@ chassis\usb_device.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
 chassis\usb_device.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdlib.h
 chassis\usb_device.o: C:\Keil_v5\ARM\Installer\Bin\..\include\string.h
 chassis\usb_device.o: ../Core/Inc/main.h
+chassis\usb_device.o: ../Core/Inc/usart.h
+chassis\usb_device.o: ../Core/Inc/main.h
 chassis\usb_device.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
 chassis\usb_device.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
 chassis\usb_device.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h

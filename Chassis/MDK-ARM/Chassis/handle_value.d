@@ -43,6 +43,9 @@ chassis\handle_value.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\handle_value.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\handle_value.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\handle_value.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\handle_value.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\handle_value.o: ../Core/Inc/usart.h
+chassis\handle_value.o: ../Core/Inc/main.h
 chassis\handle_value.o: ../USER/Task/chassis.h
 chassis\handle_value.o: C:\Keil_v5\ARM\Installer\Bin\..\include\math.h
 chassis\handle_value.o: ..\USER\handle_value.h

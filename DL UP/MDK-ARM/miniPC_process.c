@@ -102,6 +102,10 @@ Vision_Recv_s *VisionInit(Vision_Init_Config_s *init_config)
  * @param tx_buff ?????
  *
  */
+#include "CRC.h"
+extern uint16_t CRC_INIT ;
+//const uint16_t wCRC_Table[256];
+uint16_t checknm = 0;
 static void SendProcess(Vision_Send_s *send, uint8_t *tx_buff)
 {
     /* ????,????,??????? */
@@ -116,9 +120,13 @@ static void SendProcess(Vision_Send_s *send, uint8_t *tx_buff)
     memcpy(&tx_buff[12], &send->pitch, 4);
 
     /* ????? */
+		send->checksum = Get_CRC16_Check_Sum(tx_buff,16,CRC_INIT);
+	checknm =send->checksum;
     memcpy(&tx_buff[16], &send->checksum, 2);
     memcpy(&tx_buff[18], &send->tail, 1);
+	
 }
+
 
 /**
  * @brief ????
@@ -131,6 +139,7 @@ void VisionSend()
     static uint8_t send_buff[VISION_SEND_SIZE];
     SendProcess(vision_instance->send_data, send_buff);
 	  HAL_UART_Transmit(&huart1,(uint8_t *)&send_buff,sizeof(send_buff),100);
+	CDC_Transmit_FS((uint8_t *)&send_buff, sizeof(send_buff));
     //USARTSend(vision_instance->usart, send_buff, VISION_SEND_SIZE, USART_TRANSFER_BLOCKING);
 }
 

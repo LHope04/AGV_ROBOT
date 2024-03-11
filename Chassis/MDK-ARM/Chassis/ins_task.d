@@ -40,6 +40,9 @@ chassis\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\ins_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\ins_task.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\ins_task.o: ../Core/Inc/usart.h
+chassis\ins_task.o: ../Core/Inc/main.h
 chassis\ins_task.o: ../Drivers/CMSIS/DSP/Include/arm_math.h
 chassis\ins_task.o: ../Drivers/CMSIS/Include/core_cm4.h
 chassis\ins_task.o: C:\Keil_v5\ARM\Installer\Bin\..\include\string.h

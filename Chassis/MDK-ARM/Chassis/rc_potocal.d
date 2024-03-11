@@ -43,6 +43,9 @@ chassis\rc_potocal.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\rc_potocal.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\rc_potocal.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\rc_potocal.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\rc_potocal.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\rc_potocal.o: ../Core/Inc/usart.h
+chassis\rc_potocal.o: ../Core/Inc/main.h
 chassis\rc_potocal.o: ../USER/Task/chassis.h
 chassis\rc_potocal.o: ../USER/DriverLayer/user_can.h
 chassis\rc_potocal.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h

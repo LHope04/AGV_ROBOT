@@ -120,9 +120,9 @@ void MX_FREERTOS_Init(void) {
 	  osThreadDef(dcx,DCX_TASK,osPriorityNormal,0,512);
   DCXHandle = osThreadCreate(osThread(dcx),NULL);
 	
-	  //osThreadDef(yaw,gimbal_task,osPriorityNormal,0,1024);
-  //yawHandle = osThreadCreate(osThread(yaw),NULL);
-	
+	  osThreadDef(yaw,supercap,osPriorityNormal,0,128);
+  yawHandle = osThreadCreate(osThread(yaw),NULL);
+//	
 	osThreadDef(InsTask,INS_task,osPriorityRealtime,0,1024);
 	InsTaskHandle = osThreadCreate(osThread(InsTask),NULL);
   /* USER CODE END RTOS_THREADS */

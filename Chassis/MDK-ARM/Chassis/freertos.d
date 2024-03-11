@@ -47,6 +47,9 @@ chassis\freertos.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\freertos.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\freertos.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\freertos.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\freertos.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\freertos.o: ../Core/Inc/usart.h
+chassis\freertos.o: ../Core/Inc/main.h
 chassis\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
 chassis\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
 chassis\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h

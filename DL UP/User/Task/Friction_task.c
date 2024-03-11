@@ -8,7 +8,7 @@
 #include "can.h"
 #include "Friction_task.h"
 #include "Exchange_task.h"
-
+#include "tim.h"
 //这个用来写摩擦轮和拨盘
 //摩擦轮的ID分别是2和3
 //拨盘的ID是5
@@ -41,7 +41,9 @@ void Friction_task(void const * argument)
 {
   /* USER CODE BEGIN StartTask06 */
   /* Infinite loop */
-	
+
+	//TIM1 ->CCR1 = 500;
+
 	Friction_init();
   for(;;)
   {
@@ -55,34 +57,35 @@ void Friction_task(void const * argument)
 //			Bopan_send(0);
 ////			Friction_down();			
 //		}
+		//bopan_s = -50*36;
 		if(rc_ctrl.rc.s[1] == 1)
 		{
 			if(shoot||press_left)
 			{
-			target_speed_can_2[1]=-19*300;//258
-	target_speed_can_2[2]=19*300;
-			bopan_s = -30*36;
+			target_speed_can_2[1]=-19*430;//258
+	target_speed_can_2[2]=19*430;
+			bopan_s = -50*36;
 			}
 			else
 			{
 			bopan_s =0 ;
 					target_speed_can_2[1]=0;//258
-	target_speed_can_2[2]=0;
+	target_speed_can_2[2]=0; 
 			}
 		}
 		else if(rc_ctrl.rc.s[1] == 3||shoot||press_left)
 		{
 //			target_speed_can_2[1]=19*310;//258
 //	target_speed_can_2[2]=-19*310;
-						target_speed_can_2[1]=-19*300;//258
-	target_speed_can_2[2]=19*300;
+						target_speed_can_2[1]=-19*430;//258
+	target_speed_can_2[2]=19*430;
 		bopan_s =0 ;
 		
 
 		}
 	else	if(rc_ctrl.rc.s[1] == 2||shoot||press_left)
 		{
-		bopan_s = -30*36;}
+		bopan_s = -50*36;}
 		else
 		{
 		
@@ -95,7 +98,14 @@ void Friction_task(void const * argument)
 		Friction_limit();
 		Friction_send();
 		Frictionerror++;
-
+if(r_flag)
+{
+	__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1,500);
+}
+else
+{
+	__HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1,2000);
+}
 
 		
 //		if(Friction_judeg())

@@ -39,6 +39,9 @@ chassis\channel_changes.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uar
 chassis\channel_changes.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\channel_changes.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\channel_changes.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\channel_changes.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\channel_changes.o: ../Core/Inc/usart.h
+chassis\channel_changes.o: ../Core/Inc/main.h
 chassis\channel_changes.o: ../USER/PotocaLayer/rc_potocal.h
 chassis\channel_changes.o: ../USER/struct_typedef.h
 chassis\channel_changes.o: ../USER/DriverLayer/drv_can.h

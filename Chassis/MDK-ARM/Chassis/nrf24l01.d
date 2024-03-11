@@ -40,3 +40,6 @@ chassis\nrf24l01.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\nrf24l01.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
 chassis\nrf24l01.o: ../Core/Inc/gpio.h
 chassis\nrf24l01.o: ../Core/Inc/main.h
+chassis\nrf24l01.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\nrf24l01.o: ../Core/Inc/usart.h
+chassis\nrf24l01.o: ../Core/Inc/main.h

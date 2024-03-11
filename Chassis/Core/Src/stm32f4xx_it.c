@@ -327,14 +327,52 @@ void SPI1_IRQHandler(void)
 /**
   * @brief This function handles USART1 global interrupt.
   */
+
+extern UART_HandleTypeDef huart1;
+#define RX_BUFFER_SIZE 128
+uint8_t rx_buffer[128];
+
+float vi, vo, pi, ii, io, ps;
+float data[6];
+int index1;
+uint8_t rx_buffer_c[49];
+uint8_t rx_buffer_d[128];
+void parse_data(char *data_string) {
+    sscanf(data_string, "Vi:%f Vo:%f Pi:%f Ii:%f Io:%f Ps:%f", &data[0], &data[1], &data[2], &data[3], &data[4], &data[5]);
+}
+void datapy()
+{
+for(int i = 0;i<128;i++)
+		{
+		if((rx_buffer_d[i] == 0x56)&&(rx_buffer_d[i+1] == 'i'))
+		{
+			index1 = i;
+		break;
+		}
+		}
+ 
+
+		memcpy(rx_buffer_c,&rx_buffer_d[index1],49);
+
+	
+		    parse_data(rx_buffer_c);
+
+}
 void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
+	 //HAL_UART_AbortReceive(&huart1);
+			memcpy(rx_buffer_d,rx_buffer,128);
+	
+		
 
+		//	HAL_UART_Transmit_DMA(&huart6,Rx,data_length);
+			
+			
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
-	DRV_USART1_IRQHandler(&huart1);
+HAL_UART_Receive_IT(&huart1,(uint8_t *)rx_buffer,sizeof(rx_buffer));
   /* USER CODE END USART1_IRQn 1 */
 }
 
@@ -485,7 +523,7 @@ void DMA2_Stream7_IRQHandler(void)
 void USART6_IRQHandler(void)
 {
   /* USER CODE BEGIN USART6_IRQn 0 */
-
+DRV_USART6_IRQHandler(&huart6);
   /* USER CODE END USART6_IRQn 0 */
   HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */

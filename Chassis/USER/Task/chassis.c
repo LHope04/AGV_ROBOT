@@ -33,14 +33,14 @@ extern int omega;
 uint16_t initial_angle[4];
 int16_t Max_out_a = 20000;
 int16_t Max_iout_a = 20000;
-int16_t Max_out_s = 16384; //电压控制转速，电流控制扭矩
+int16_t Max_out_s = 15000; //电压控制转速，电流控制扭矩
 int16_t Max_iout_s = 2000;
 pidTypeDef PID_angle[4];
 pidTypeDef PID_speed_3508[4];
 pidTypeDef PID_speed_6020[4];
 extern fp32 yaw_err ;
 fp32 error_theta; //云台坐标系与底盘坐标系间夹角(此时为0~360度) 后期接收后需要对所得theta进行处理
-
+extern float Hero_chassis_power;
 void Yaw_Diff()
 {
 	UpData.yaw_up = Up_ins_yaw ; //测试舵轮 可删
@@ -99,4 +99,30 @@ void Chassis(void const * argument)
 		//can_cmd_send_6020_2(10000,1000,1000,1000);
     osDelay(10);
   }
+}
+extern uint16_t Hero_chassis_power_limit;
+void supercap()
+{
+	while(1)
+	{
+		//int power=1000;
+		//printf("%s\n", power);
+		int power = (int)Hero_chassis_power_limit;
+		uint8_t iuy[7] = "P100P\r\n";
+		
+    char buffer[20]; // 保证足够的缓冲区大小以容纳您的数字
+
+    // 将 power 格式化为字符串并将其存储在 buffer 中
+    sprintf(buffer, "%d", power);
+
+    // 输出格式化后的字符串
+
+		HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+		
+		
+//    printf("%s", "40");
+//		printf("%s\n", "P");
+		
+		osDelay(1000);
+	}
 }

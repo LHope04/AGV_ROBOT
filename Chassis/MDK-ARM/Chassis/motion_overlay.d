@@ -39,6 +39,9 @@ chassis\motion_overlay.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart
 chassis\motion_overlay.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\motion_overlay.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\motion_overlay.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\motion_overlay.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\motion_overlay.o: ../Core/Inc/usart.h
+chassis\motion_overlay.o: ../Core/Inc/main.h
 chassis\motion_overlay.o: ..\USER\handle_value.h
 chassis\motion_overlay.o: C:\Keil_v5\ARM\Installer\Bin\..\include\math.h
 chassis\motion_overlay.o: ../USER/Task/chassis.h

@@ -39,4 +39,7 @@ chassis\communication.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.
 chassis\communication.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\communication.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\communication.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\communication.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\communication.o: ../Core/Inc/usart.h
+chassis\communication.o: ../Core/Inc/main.h
 chassis\communication.o: C:\Keil_v5\ARM\Installer\Bin\..\include\string.h

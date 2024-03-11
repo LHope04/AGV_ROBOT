@@ -39,6 +39,9 @@ chassis\user_can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\user_can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\user_can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\user_can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\user_can.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\user_can.o: ../Core/Inc/usart.h
+chassis\user_can.o: ../Core/Inc/main.h
 chassis\user_can.o: C:\Keil_v5\ARM\Installer\Bin\..\include\string.h
 chassis\user_can.o: ../Core/Inc/yaw_task.h
 chassis\user_can.o: ../USER/Task/INS_Task/ins_task/pid.h

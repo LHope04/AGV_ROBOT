@@ -43,6 +43,7 @@ void exchangeangle_task(void const *pvParameters)
 				ins_data.gyro[0]=INS.Gyro[2];
         VisionSetAltitude(INS.Yaw, INS.Pitch, INS.Roll);
         VisionSend();
+				
 //			int senddata  = 10000;
 //			    HAL_UART_Transmit(&huart1,(uint8_t *)&senddata,sizeof(senddata),0xFFFF);
 			// vision_instance

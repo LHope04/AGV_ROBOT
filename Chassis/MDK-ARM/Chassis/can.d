@@ -39,6 +39,9 @@ chassis\can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\can.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\can.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\can.o: ../Core/Inc/usart.h
+chassis\can.o: ../Core/Inc/main.h
 chassis\can.o: ../USER/struct_typedef.h
 chassis\can.o: ../USER/Task/chassis.h
 chassis\can.o: ../Core/Inc/can.h

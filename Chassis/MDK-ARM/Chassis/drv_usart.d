@@ -39,9 +39,13 @@ chassis\drv_usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\drv_usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\drv_usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\drv_usart.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\drv_usart.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\drv_usart.o: ../Core/Inc/usart.h
+chassis\drv_usart.o: ../Core/Inc/main.h
 chassis\drv_usart.o: ../USER/PotocaLayer/rc_potocal.h
 chassis\drv_usart.o: ../USER/struct_typedef.h
 chassis\drv_usart.o: ../USER/DriverLayer/drv_can.h
 chassis\drv_usart.o: ../USER/Task/chassis.h
 chassis\drv_usart.o: ../Core/Inc/can.h
 chassis\drv_usart.o: ../USER/Task/chassis.h
+chassis\drv_usart.o: ../USER/PotocaLayer/judge.h

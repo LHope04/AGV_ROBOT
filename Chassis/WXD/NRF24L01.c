@@ -42,7 +42,7 @@ void Delay(vu32 nCount)
 		shoot = (int8_t)TxData[12];
 		xtl = (int8_t)TxData[13];
 		}
-
+datapy();
 
 	osDelay(1);
 	}

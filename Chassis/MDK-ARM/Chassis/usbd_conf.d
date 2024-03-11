@@ -43,6 +43,8 @@ chassis\usbd_conf.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
 chassis\usbd_conf.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdlib.h
 chassis\usbd_conf.o: C:\Keil_v5\ARM\Installer\Bin\..\include\string.h
 chassis\usbd_conf.o: ../Core/Inc/main.h
+chassis\usbd_conf.o: ../Core/Inc/usart.h
+chassis\usbd_conf.o: ../Core/Inc/main.h
 chassis\usbd_conf.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
 chassis\usbd_conf.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
 chassis\usbd_conf.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h

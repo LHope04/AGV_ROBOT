@@ -43,6 +43,9 @@ chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\yaw_task.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\yaw_task.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\yaw_task.o: ../Core/Inc/usart.h
+chassis\yaw_task.o: ../Core/Inc/main.h
 chassis\yaw_task.o: ../USER/Task/chassis.h
 chassis\yaw_task.o: ../Core/Inc/yaw_task.h
 chassis\yaw_task.o: ../USER/Task/INS_Task/ins_task/pid.h

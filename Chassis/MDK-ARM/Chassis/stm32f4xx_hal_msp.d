@@ -38,3 +38,6 @@ chassis\stm32f4xx_hal_msp.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_u
 chassis\stm32f4xx_hal_msp.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\stm32f4xx_hal_msp.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\stm32f4xx_hal_msp.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
+chassis\stm32f4xx_hal_msp.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\stm32f4xx_hal_msp.o: ../Core/Inc/usart.h
+chassis\stm32f4xx_hal_msp.o: ../Core/Inc/main.h
