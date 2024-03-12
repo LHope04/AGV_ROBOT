@@ -4,7 +4,7 @@
 *@date       2023.12.30
 *@param      None
 *@return     None
-*@warning    该文件为主函数，功能可根据需求修改，具体功能函数在"motion_overlay.c"中。
+*@warning    该文件为主函数，功能可根据需求修改，具体功能函数�?"motion_overlay.c"中�?
 */
 
 #include "freertos.h"
@@ -23,10 +23,10 @@
 
 extern int Up_ins_yaw;
 extern motor_info motor[8]; //底盘电机数据
-extern RC_ctrl_t rc_ctrl; //遥控器数据
+extern RC_ctrl_t rc_ctrl; //遥控器数�?
 extern fp32 INS_angle[3]; //下C板陀螺仪数据
-extern up_data UpData; //上C板数据
-extern int16_t motor_angle[4]; //6020角度 在motion_overlay.c中计算 作为全局变量
+extern up_data UpData; //上C板数�?
+extern int16_t motor_angle[4]; //6020角度 在motion_overlay.c中计�? 作为全局变量
 extern int16_t motor_speed[4]; //3508速度
 extern int omega; 
 		uint8_t Buf1[10];
@@ -39,7 +39,7 @@ pidTypeDef PID_angle[4];
 pidTypeDef PID_speed_3508[4];
 pidTypeDef PID_speed_6020[4];
 extern fp32 yaw_err ;
-fp32 error_theta; //云台坐标系与底盘坐标系间夹角(此时为0~360度) 后期接收后需要对所得theta进行处理
+fp32 error_theta; //云台坐标系与底盘坐标系间夹角(此时�?0~360�?) 后期接收后需要对所得theta进行处理
 extern float Hero_chassis_power;
 void Yaw_Diff()
 {
@@ -77,7 +77,7 @@ void Chassis(void const * argument)
 //********************************************************************************************//
 
 		//设置初始角度		
-		if(m==0&&rc_ctrl.rc.s[0]==1){
+		if(m==0){
 			initial_angle[0] = 3759; //初始角度（底盘正前方各轮子角度）
 			initial_angle[1] = 1723;
 			initial_angle[2] = 1070;
@@ -85,12 +85,12 @@ void Chassis(void const * argument)
 			m++;
 		}
 		
-		Yaw_Diff(); //得到上C板与下C板间yaw的差值
+		Yaw_Diff(); //得到上C板与下C板间yaw的差�?
 
-		//遥控器控制底盘不同运动
-		//具体实现方式在"motion_overlay.c"
+		//遥控器控制底盘不同运�?
+		//具体实现方式�?"motion_overlay.c"
 
-			compound_control(); //旋转加平移运动
+			compound_control(); //旋转加平移运�?
 
 
 			//CDC_Transmit_FS(&Buf1, 10);
@@ -101,18 +101,38 @@ void Chassis(void const * argument)
   }
 }
 extern uint16_t Hero_chassis_power_limit;
+extern uint16_t Hero_chassis_power_buffer;
+
+int superop = 0;
 void supercap()
 {
 	while(1)
 	{
 		//int power=1000;
 		//printf("%s\n", power);
+		uint8_t iuy[7] = "P060P\r\n";
 		int power = (int)Hero_chassis_power_limit;
-		uint8_t iuy[7] = "P100P\r\n";
+if (power == 60) strcpy(iuy, "P060P\r\n");
+		else if (power == 70) strcpy(iuy, "P070P\r\n");
+		else if (power == 80) strcpy(iuy, "P080P\r\n");
+		else if (power == 90) strcpy(iuy, "P090P\r\n");
+		else if (power == 100) strcpy(iuy, "P100P\r\n");
+		else strcpy(iuy, "P060P\r\n");
+		uint8_t sco[7] = "PVONP\r\n";
+		uint8_t scc[7] = "PVOFP\r\n";
+    char buffer[20]; // 保证足够的缓冲区大小以容纳您的数�?
+		if (Hero_chassis_power_buffer < 10)
+		{
+			HAL_UART_Transmit(&huart1,(uint8_t *)sco,7,0xff);
+			superop = 1;
+		}
+		else
+		{
+		HAL_UART_Transmit(&huart1,(uint8_t *)scc,7,0xff);
+			superop = 0;
 		
-    char buffer[20]; // 保证足够的缓冲区大小以容纳您的数字
-
-    // 将 power 格式化为字符串并将其存储在 buffer 中
+		}
+    // �? power 格式化为字符串并将其存储�? buffer �?
     sprintf(buffer, "%d", power);
 
     // 输出格式化后的字符串

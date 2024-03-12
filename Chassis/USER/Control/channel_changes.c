@@ -38,6 +38,7 @@ float Plimit=0;
 float Chassis_pidout_max;
 extern float Hero_chassis_power;
 extern uint16_t Hero_chassis_power_buffer;
+extern int superop;
 
 //将3508和6020运动模式结合，形成底盘控制
 
@@ -129,12 +130,12 @@ static void Chassis_Power_Limit(double Chassis_pidout_target_limit)
 		else if(Klimit < -1) Klimit = -1;//限制绝对值不能超过1，也就是Chassis_pidout一定要小于某个速度值，不能超调
 
 		/*缓冲能量占比环，总体约束*/
-		if(Watch_Buffer<50&&Watch_Buffer>=40)	Plimit=0.9;		//近似于以一个线性来约束比例（为了保守可以调低Plimit，但会影响响应速度）
-		else if(Watch_Buffer<40&&Watch_Buffer>=35)	Plimit=0.75;
-		else if(Watch_Buffer<35&&Watch_Buffer>=30)	Plimit=0.5;
-		else if(Watch_Buffer<30&&Watch_Buffer>=20)	Plimit=0.25;
-		else if(Watch_Buffer<20&&Watch_Buffer>=10)	Plimit=0.125;
-		else if(Watch_Buffer<10&&Watch_Buffer>=0)	Plimit=0.05;
+		if(Watch_Buffer<50&&Watch_Buffer>=40&&superop == 0)	Plimit=0.9;		//近似于以一个线性来约束比例（为了保守可以调低Plimit，但会影响响应速度）
+		else if(Watch_Buffer<40&&Watch_Buffer>=35&&superop == 0)	Plimit=0.75;
+		else if(Watch_Buffer<35&&Watch_Buffer>=30&&superop == 0)	Plimit=0.5;
+		else if(Watch_Buffer<30&&Watch_Buffer>=20&&superop == 0)	Plimit=0.25;
+		else if(Watch_Buffer<20&&Watch_Buffer>=10&&superop == 0)	Plimit=0.125;
+		else if(Watch_Buffer<10&&Watch_Buffer>=0&&superop == 0)	Plimit=0.05;
 		else {Plimit=1;}
 		
 		output_3508[0] = Scaling1*(Chassis_pidout_max*Klimit)*Plimit;//输出值

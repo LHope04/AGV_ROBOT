@@ -1,7 +1,7 @@
 chassis\freertos.o: ../Core/Src/freertos.c
 chassis\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-chassis\freertos.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stddef.h
-chassis\freertos.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdint.h
+chassis\freertos.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
+chassis\freertos.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
 chassis\freertos.o: ../Core/Inc/FreeRTOSConfig.h
 chassis\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 chassis\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
@@ -47,7 +47,7 @@ chassis\freertos.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis\freertos.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h
 chassis\freertos.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 chassis\freertos.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
-chassis\freertos.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdio.h
+chassis\freertos.o: F:\keil\ARM\ARMCC\Bin\..\include\stdio.h
 chassis\freertos.o: ../Core/Inc/usart.h
 chassis\freertos.o: ../Core/Inc/main.h
 chassis\freertos.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
