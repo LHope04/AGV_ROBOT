@@ -200,7 +200,7 @@ void compound_control()
 	  
 		if(flagxtl)
 		{
-		if(vxd>-500)
+		if(vxd>-800)
 		{
 		vxd -= 50;
 		
@@ -220,7 +220,7 @@ void compound_control()
 		if(flagxtl)
 		{
 		
-				if(vxd<500)
+				if(vxd<800)
 		{
 		vxd += 50;
 		
@@ -249,7 +249,7 @@ void compound_control()
 	{
 		if(flagxtl)
 		{
-		if(vyd<500)
+		if(vyd<800)
 		{
 		vyd += 50;
 		
@@ -278,7 +278,7 @@ void compound_control()
 		
 		if(flagxtl)
 		{
-		if(vyd>-500)
+		if(vyd>-800)
 		{
 		vyd -= 50;
 		
@@ -318,8 +318,8 @@ void compound_control()
 	 if(rc_ctrl.rc.s[0]==2)
 	{
 		omega = 12;
-	vxd = rc_ctrl.rc.ch[0]*1.2;
-	vyd = rc_ctrl.rc.ch[1]*1.2;
+	vxd = rc_ctrl.rc.ch[0]*4;
+	vyd = rc_ctrl.rc.ch[1]*4;
 	yaw_err += 0.01916; 
 	}
 	 if(rc_ctrl.rc.s[0]==3&&!shift_flag){

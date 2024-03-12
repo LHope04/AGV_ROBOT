@@ -121,7 +121,7 @@ if (power == 60) strcpy(iuy, "P060P\r\n");
 		uint8_t sco[7] = "PVONP\r\n";
 		uint8_t scc[7] = "PVOFP\r\n";
     char buffer[20]; // 保证足够的缓冲区大小以容纳您的数�?
-		if (Hero_chassis_power_buffer < 10)
+		if (Hero_chassis_power_buffer < 5)
 		{
 			HAL_UART_Transmit(&huart1,(uint8_t *)sco,7,0xff);
 			superop = 1;
@@ -143,6 +143,6 @@ if (power == 60) strcpy(iuy, "P060P\r\n");
 //    printf("%s", "40");
 //		printf("%s\n", "P");
 		
-		osDelay(1000);
+		osDelay(10);
 	}
 }
