@@ -27,60 +27,7 @@ Project File Date:  03/12/2024
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'F:\keil\ARM\ARMCC\Bin'
 Build target 'Chassis'
-compiling chassis.c...
-../USER/Task/chassis.h(6): warning:  #1295-D: Deprecated declaration Yaw_Diff - give arg types
-  void Yaw_Diff();
-../USER/Task/chassis.h(7): warning:  #1295-D: Deprecated declaration supercap - give arg types
-  void supercap();
-../USER/Task/chassis.h(8): warning:  #1-D: last line of file ends without a newline
-  #endif
-../USER/DriverLayer/user_can.h(5): warning:  #1295-D: Deprecated declaration CAN1_Init - give arg types
-  void CAN1_Init();
-../USER/DriverLayer/user_can.h(6): warning:  #1295-D: Deprecated declaration CAN2_Init - give arg types
-  void CAN2_Init();
-../USER/DriverLayer/user_can.h(24): warning:  #1-D: last line of file ends without a newline
-  #endif
-../USER/DriverLayer/user_pid.h(20): warning:  #1-D: last line of file ends without a newline
-  #endif
-../USER/DriverLayer/drv_can.h(13): warning:  #1-D: last line of file ends without a newline
-  #endif
-../USER/PotocaLayer/rc_potocal.h(55): warning:  #1-D: last line of file ends without a newline
-  #endif
-../USER/handle_value.h(8): warning:  #1-D: last line of file ends without a newline
-  #endif
-../USER/motion_overlay.h(11): warning:  #1295-D: Deprecated declaration rotate_6020 - give arg types
-  void rotate_6020();
-../USER/motion_overlay.h(13): warning:  #1-D: last line of file ends without a newline
-  #endif
-../USER/Control/channel_changes.h(4): warning:  #1295-D: Deprecated declaration translational_control - give arg types
-  void translational_control();
-../USER/Control/channel_changes.h(5): warning:  #1295-D: Deprecated declaration compound_control - give arg types
-  void compound_control();
-../USER/Control/channel_changes.h(6): warning:  #1295-D: Deprecated declaration rotate_control - give arg types
-  void rotate_control();
-../USER/Control/channel_changes.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\USER\Task\chassis.c(49): warning:  #1035-D: single-precision operand implicitly converted to double-precision
-  	error_theta = error_theta*3.1415926/180; //è½?åŒ?ä¸?å¼?åº?åˆ?
-..\USER\Task\chassis.c(115): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  if (power == 60) strcpy(iuy, "P060P\r\n");
-..\USER\Task\chassis.c(116): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  		else if (power == 70) strcpy(iuy, "P070P\r\n");
-..\USER\Task\chassis.c(117): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  		else if (power == 80) strcpy(iuy, "P080P\r\n");
-..\USER\Task\chassis.c(118): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  		else if (power == 90) strcpy(iuy, "P090P\r\n");
-..\USER\Task\chassis.c(119): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  		else if (power == 100) strcpy(iuy, "P100P\r\n");
-..\USER\Task\chassis.c(120): warning:  #167-D: argument of type "uint8_t *" is incompatible with parameter of type "char *restrict"
-  		else strcpy(iuy, "P060P\r\n");
-..\USER\Task\chassis.c(148): warning:  #1-D: last line of file ends without a newline
-  }
-..\USER\Task\chassis.c: 24 warnings, 0 errors
-linking...
-Program Size: Code=54116 RO-data=2128 RW-data=884 ZI-data=36124  
-FromELF: creating hex file...
-"Chassis\Chassis.axf" - 0 Error(s), 24 Warning(s).
+"Chassis\Chassis.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -103,7 +50,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:4.3.0
-Build Time Elapsed:  00:00:02
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>
