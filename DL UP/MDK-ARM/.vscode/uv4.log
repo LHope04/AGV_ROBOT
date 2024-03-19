@@ -1,4 +1,2 @@
-*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'F:\keil\ARM\ARMCC\Bin'
-Build target 'C_Board_Standard_Robot'
-"C_Board_Standard_Robot\C_Board_Standard_Robot.axf" - 0 Error(s), 0 Warning(s).
-Build Time Elapsed:  00:00:01
+Load "C_Board_Standard_Robot\\C_Board_Standard_Robot.axf" 
+Erase Done.Programming Done.Verify OK.Flash Load finished at 03:06:28

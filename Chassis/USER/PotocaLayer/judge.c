@@ -19,7 +19,7 @@ uint8_t Flag_first = 0;
 //extern uint8_t first_y;
 extern CAN_HandleTypeDef hcan1;
 
-void Update_data();//¶¨ÒåÒ»Ð©ÐèÒªÓÃµ½µÄ±äÁ¿²¢ÊµÊ±¸üÐÂÊýÖµ·½±ãÆäËûÎÄ¼þµ÷ÓÃ
+void Update_data();//ï¿½ï¿½ï¿½ï¿½Ò»Ð©ï¿½ï¿½Òªï¿½Ãµï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ÊµÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
 void JUDGE_Receive(volatile uint8_t *databuffer,uint8_t length)
 {
     uint8_t pos=0;
@@ -74,11 +74,11 @@ void JUDGE_Receive(volatile uint8_t *databuffer,uint8_t length)
                          break;
                     case 0x0201:
                          data_length = 27;
-                         memcpy((void*)(&Judge_Hero.robot_status), (const void*)(&databuffer[pos+7]), data_length);   //µ×ÅÌ¹¦ÂÊÏÞÖÆÉÏÏÞÔÚÕâ
+                         memcpy((void*)(&Judge_Hero.robot_status), (const void*)(&databuffer[pos+7]), data_length);   //ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         break;
                     case 0x0202:
                         data_length = 16;
-                        memcpy((void*)(&Judge_Hero.power_heat), (const void*)(&databuffer[pos+7]), data_length);      //º¬ÊµÊ±¹¦ÂÊÈÈÁ¿Êý¾Ý
+                        memcpy((void*)(&Judge_Hero.power_heat), (const void*)(&databuffer[pos+7]), data_length);      //ï¿½ï¿½ÊµÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         break;
                     case 0x0203:
                         data_length = 16;
@@ -134,27 +134,27 @@ void JUDGE_Receive(volatile uint8_t *databuffer,uint8_t length)
 
 void Update_data()
 {
-	Hero_id = Judge_Hero.robot_status.robot_id;//IDºÅ
-	Hero_level = Judge_Hero.robot_status.robot_level;//µÈ¼¶
-	Hero_42mm_speed_limit = Judge_Hero.robot_status.shooter_id1_42mm_speed_limit;//42mmµ¯ÍèÉäËÙÏÞÖÆ
-	Hero_chassis_power_limit = Judge_Hero.robot_status.chassis_power_limit;//¹¦ÂÊÏÞÖÆ
-	Hero_chassis_power_buffer = Judge_Hero.power_heat.chassis_power_buffer;//»º³åÄÜÁ¿
-	Hero_chassis_power = Judge_Hero.power_heat.chassis_power;//ÊµÊ±¹¦ÂÊ
+	Hero_id = Judge_Hero.robot_status.robot_id;//IDï¿½ï¿½
+	Hero_level = Judge_Hero.robot_status.robot_level;//ï¿½È¼ï¿½
+	Hero_42mm_speed_limit = Judge_Hero.robot_status.shooter_barrel_heat_limit;//42mmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Hero_chassis_power_limit = Judge_Hero.robot_status.chassis_power_limit;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Hero_chassis_power_buffer = Judge_Hero.power_heat.chassis_power_buffer;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Hero_chassis_power = Judge_Hero.power_heat.chassis_power;//ÊµÊ±ï¿½ï¿½ï¿½ï¿½
 	if(Judge_Hero.shoot_data.bullet_speed)
 	{
 		Hero_42mm_speed = Judge_Hero.shoot_data.bullet_speed;
 	}
-	//±ÈÈü½ø³Ì
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	Flag_progress =  Judge_Hero.status.game_progress;
-	if(Flag_progress == 4 && Flag_first == 0)		//±ÈÈü¿ªÊ¼
+	if(Flag_progress == 4 && Flag_first == 0)		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼
 	{
 //		first_x = 1;
 //		first_y = 1;
 		Flag_first = 1;
 //		HAL_TIM_Base_Start_IT(&htim8);
 	}
-	//ÅÐ¶ÏÎÒ·½ÊÇºì·½»¹ÊÇÀ¶·½
-	if(Hero_id == 7)//ºìÉ«·½
+	//ï¿½Ð¶ï¿½ï¿½Ò·ï¿½ï¿½Çºì·½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	if(Hero_id == 7)//ï¿½ï¿½É«ï¿½ï¿½
 	{
 		Flag_judge = 1;
 	}
@@ -163,8 +163,8 @@ void Update_data()
 		Flag_judge = 2;
 	}
 	
-	//ÅÐ¶ÏÊÇºì·½ÉÚ±ø»¹ÊÇÀ¶·½,µôÑªÇ¿ÖÆ¿ªÆôÐý×ªÄ£Ê½
-	if(Flag_judge == 1)//ºìÉ«·½
+	//ï¿½Ð¶ï¿½ï¿½Çºì·½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ÑªÇ¿ï¿½Æ¿ï¿½ï¿½ï¿½ï¿½ï¿½×ªÄ£Ê½
+	if(Flag_judge == 1)//ï¿½ï¿½É«ï¿½ï¿½
 	{
 		if(Judge_Hero.robot_hp.red_7_robot_HP!= 0 && Judge_Hero.robot_hp.red_7_robot_HP != 600)
 		{
@@ -172,7 +172,7 @@ void Update_data()
 		}
 	}
 	
-	else if(Flag_judge == 2)//À¶É«·½
+	else if(Flag_judge == 2)//ï¿½ï¿½É«ï¿½ï¿½
 	{
 		if(Judge_Hero.robot_hp.blue_7_robot_HP!= 0 && Judge_Hero.robot_hp.blue_7_robot_HP != 600)
 		{
@@ -180,7 +180,7 @@ void Update_data()
 		}
 	}
 	
-	//·¢ËÍ¸øÉÏC°å
+	//ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½Cï¿½ï¿½
 	uint8_t temp_remote[2];
 	temp_remote[0] = Flag_progress;
 	temp_remote[1] = Flag_judge;
@@ -188,9 +188,9 @@ void Update_data()
 	CAN_TxHeaderTypeDef tx_header;
     
   tx_header.StdId = 0x10;
-  tx_header.IDE   = CAN_ID_STD;//±ê×¼Ö¡
-  tx_header.RTR   = CAN_RTR_DATA;//Êý¾ÝÖ¡
-  tx_header.DLC   = 2;		//·¢ËÍÊý¾Ý³¤¶È£¨×Ö½Ú£©
+  tx_header.IDE   = CAN_ID_STD;//ï¿½ï¿½×¼Ö¡
+  tx_header.RTR   = CAN_RTR_DATA;//ï¿½ï¿½ï¿½ï¿½Ö¡
+  tx_header.DLC   = 2;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½È£ï¿½ï¿½Ö½Ú£ï¿½
 
   HAL_CAN_AddTxMessage(&hcan1, &tx_header, temp_remote,(uint32_t*)CAN_TX_MAILBOX0);
 }

@@ -19,8 +19,9 @@
 #include "channel_changes.h"
 #include "INS_task.h"
 #include "usbd_cdc.h"
-
-
+#include "judge.h"
+extern JUDGE_MODULE_DATA Judge_Hero;
+extern uint8_t temp_remote2[8] ;
 extern int Up_ins_yaw;
 extern motor_info motor[8]; //底盘电机数据
 extern RC_ctrl_t rc_ctrl; //遥控器数�?
@@ -33,7 +34,7 @@ extern int omega;
 uint16_t initial_angle[4];
 int16_t Max_out_a = 20000;
 int16_t Max_iout_a = 20000;
-int16_t Max_out_s = 15000; //电压控制转速，电流控制扭矩
+int16_t Max_out_s = 6000; //电压控制转速，电流控制扭矩
 int16_t Max_iout_s = 2000;
 pidTypeDef PID_angle[4];
 pidTypeDef PID_speed_3508[4];
@@ -41,12 +42,18 @@ pidTypeDef PID_speed_6020[4];
 extern fp32 yaw_err ;
 fp32 error_theta; //云台坐标系与底盘坐标系间夹角(此时�?0~360�?) 后期接收后需要对所得theta进行处理
 extern float Hero_chassis_power;
+extern uint16_t yaw_code_val;
 void Yaw_Diff()
 {
 	UpData.yaw_up = Up_ins_yaw ; //测试舵轮 可删
 	//UpData.yaw_up = Up_ins_yaw;
 	error_theta = UpData.yaw_up - INS_angle[0]+yaw_err; 
 	error_theta = error_theta*3.1415926/180; //转化为弧度制
+	//change to code of yaw_motor
+	if(yaw_code_val > 5711)
+	error_theta = (yaw_code_val-5711)*(6.26f/8191);
+	else if(yaw_code_val!=0)
+	error_theta = (yaw_code_val-5711+8191)*(6.26f/8191);
 }
 USBD_HandleTypeDef axy;
 void Chassis(void const * argument)
@@ -75,7 +82,11 @@ void Chassis(void const * argument)
 //			m++;
 //		}
 //********************************************************************************************//
-
+	if(x_flag)
+	{
+	
+	yaw_err = -(UpData.yaw_up - INS_angle[0])-90.f;
+	}
 		//设置初始角度		
 		if(m==0){
 			initial_angle[0] = 3759; //初始角度（底盘正前方各轮子角度）
@@ -91,7 +102,9 @@ void Chassis(void const * argument)
 		//具体实现方式�?"motion_overlay.c"
 
 			compound_control(); //旋转加平移运�?
-
+	memcpy((void*)(&temp_remote2[0]),(const void*)(&Judge_Hero.power_heat.shooter_id1_17mm_cooling_heat),2);
+memcpy((void*)(&temp_remote2[2]),(const void*)(&Judge_Hero.robot_status.shooter_barrel_heat_limit),2);//?????8
+can_remote(temp_remote2,0x36);
 
 			//CDC_Transmit_FS(&Buf1, 10);
 		
@@ -102,47 +115,119 @@ void Chassis(void const * argument)
 }
 extern uint16_t Hero_chassis_power_limit;
 extern uint16_t Hero_chassis_power_buffer;
-
+extern float data[6];
+uint8_t iuy[7] = "P060P\r\n";
+		uint8_t sco[7] = "PVONP\r\n";
+		uint8_t scc[7] = "PVOFP\r\n";
 int superop = 0;
 void supercap()
 {
-	while(1)
-	{
-		//int power=1000;
-		//printf("%s\n", power);
-		uint8_t iuy[7] = "P060P\r\n";
+			
 		int power = (int)Hero_chassis_power_limit;
-if (power == 60) strcpy(iuy, "P060P\r\n");
+	if (power == 60) strcpy(iuy, "P060P\r\n");
 		else if (power == 70) strcpy(iuy, "P070P\r\n");
 		else if (power == 80) strcpy(iuy, "P080P\r\n");
 		else if (power == 90) strcpy(iuy, "P090P\r\n");
 		else if (power == 100) strcpy(iuy, "P100P\r\n");
 		else strcpy(iuy, "P060P\r\n");
-		uint8_t sco[7] = "PVONP\r\n";
-		uint8_t scc[7] = "PVOFP\r\n";
+	while(1)
+	{
+		//int power=1000;
+		//printf("%s\n", power);
+
+
+		
     char buffer[20]; // 保证足够的缓冲区大小以容纳您的数�?
-		if (Hero_chassis_power_buffer < 5)
+//		if (Hero_chassis_power_buffer < 70&&Hero_chassis_power_buffer >40)
+//		{
+//			strcpy(iuy, "P100P\r\n");
+//			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+//			superop = 1;
+//		}
+//		else if(Hero_chassis_power_buffer < 40&&Hero_chassis_power_buffer >30)
+//		{
+//		strcpy(iuy, "P090P\r\n");
+//			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+//			superop = 1;
+//		
+//		}
+//				else if(Hero_chassis_power_buffer < 30&&Hero_chassis_power_buffer >20)
+//		{
+//		strcpy(iuy, "P080P\r\n");
+//			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+//			superop = 1;
+//		
+//		}
+//						else if(Hero_chassis_power_buffer < 10&&Hero_chassis_power_buffer > 10)
+//		{
+//		strcpy(iuy, "P065P\r\n");
+//			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+//			superop = 1;
+//		
+//		}
+//								else if(Hero_chassis_power_buffer < 10)
+//		{
+//		strcpy(iuy, "P060P\r\n");
+//			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+//			superop = 1;
+//		
+//		}
+		
+		if (Hero_chassis_power_buffer-data[2]*0.1>5 )
 		{
-			HAL_UART_Transmit(&huart1,(uint8_t *)sco,7,0xff);
+			strcpy(iuy, "P060P\r\n");
+			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
 			superop = 1;
 		}
-		else
+		else if((data[2]*0.1-Hero_chassis_power_buffer<50)&&(data[2]*0.1-Hero_chassis_power_buffer>40))
 		{
-		HAL_UART_Transmit(&huart1,(uint8_t *)scc,7,0xff);
-			superop = 0;
+		strcpy(iuy, "P090P\r\n");
+			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+			superop = 1;
 		
 		}
+				else if((data[2]*0.1-Hero_chassis_power_buffer<40)&&(data[2]*0.1-Hero_chassis_power_buffer>30))
+		{
+		strcpy(iuy, "P080P\r\n");
+			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+			superop = 1;
+		
+		}
+						else if((data[2]*0.1-Hero_chassis_power_buffer<40)&&(data[2]*0.1-Hero_chassis_power_buffer>20))
+		{
+		strcpy(iuy, "P075P\r\n");
+			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+			superop = 1;
+		
+		}
+								else if((data[2]*0.1-Hero_chassis_power_buffer<20)&&(data[2]*0.1-Hero_chassis_power_buffer>10))
+		{
+		strcpy(iuy, "P070P\r\n");
+			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+			superop = 1;
+		
+		}
+										else 
+		{
+		strcpy(iuy, "P044P\r\n");
+			HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+			superop = 1;
+		
+		}
+		
+		
+		
     // �? power 格式化为字符串并将其存储�? buffer �?
     sprintf(buffer, "%d", power);
 
     // 输出格式化后的字符串
 
-		HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
+		//HAL_UART_Transmit(&huart1,(uint8_t *)iuy,7,0xff);
 		
 		
 //    printf("%s", "40");
 //		printf("%s\n", "P");
 		
-		osDelay(10);
+		osDelay(100);
 	}
 }

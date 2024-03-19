@@ -162,7 +162,7 @@ void can_cmd_send_6020_2(int motor1,int motor2,int motor3,int motor4) //can2发�
 //	}
 //}
 /*******************************************************************************************************************/
-
+extern uint16_t yaw_code_val;
 
 /*********************************************CAN通信接收回调函数 fifo0*********************************************/
 int error = 0;
@@ -173,6 +173,10 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		CAN_RxHeaderTypeDef can_rx_message;
 		uint8_t can_recevie_data[8];
 		HAL_CAN_GetRxMessage(hcan,CAN_RX_FIFO0,&can_rx_message,can_recevie_data);
+		if(can_rx_message.StdId == 0x47)
+		{
+			memcpy((void*)(&yaw_code_val),(const void*)(&can_recevie_data[0]),2);
+		}
 		if(can_rx_message.StdId == 0x404){
 			memcpy(&UpData.yaw_up,&can_recevie_data,4); //接收上C板yaw(float)
 		}

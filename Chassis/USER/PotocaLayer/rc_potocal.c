@@ -2,8 +2,9 @@
 #include "user_can.h"
 #include "cmsis_os.h"
 #include "NRF24L01.h"
+#include "judge.h"
 //#include "INS_task.h"
-
+extern JUDGE_MODULE_DATA Judge_Hero;
 //底盘电机结构体
 extern motor_info  motor[8];
 int16_t Rotate_w;
@@ -34,6 +35,7 @@ uint16_t c_flag;
 uint16_t v_flag;
 uint16_t b_flag;
 uint8_t temp_remote1[8] ;
+uint8_t temp_remote2[8] ;
 //  uint8_t temp_remote[8];
  uint8_t remote_data_rc1[8]; //传给上C板rc_ctrl.rc.ch[0]~[3]
  uint8_t remote_data_rc2[8]; //传给上C板rc_ctrl.rc[4]&rc_ctrl.rc.s&rc_ctrl.key
@@ -84,9 +86,11 @@ uint8_t temp_remote1[8] ;
 		
 		temp_remote1[4]=(uint8_t) vw;
 	temp_remote1[5]=(uint8_t) shoot;
-
-		
+memcpy((void*)(&temp_remote1[6]),(const void*)(&Judge_Hero.power_heat.shooter_id1_17mm_cooling_heat),2);
 		can_remote(temp_remote1,0x35);
+
+
+
 	/********************************************************************************************************/
 	
 	

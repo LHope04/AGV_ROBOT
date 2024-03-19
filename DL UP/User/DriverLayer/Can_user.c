@@ -1,7 +1,7 @@
 #include "Can_user.h"
 #include "remote_control.h"
 
-//	Can µÄÒ»Ð©ÓÃ»§×«Ð´µÄ½ÓÊÕº¯Êý
+//	Can ï¿½ï¿½Ò»Ð©ï¿½Ã»ï¿½×«Ð´ï¿½Ä½ï¿½ï¿½Õºï¿½ï¿½ï¿½
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
 extern int16_t Rotate_w;
@@ -12,24 +12,26 @@ int16_t yaw_s,pitch_s;
 int8_t errt;
 int8_t shoot = 0;
 float yaw_ss,pitch_ss;
+extern uint16_t muzzle_heat;
+extern uint16_t muzzle_heat_limit;
 void can_1_user_init(CAN_HandleTypeDef* hcan )
 {
   CAN_FilterTypeDef  can_filter;
 
   can_filter.FilterBank = 0;                       // filter 0
-  can_filter.FilterMode =  CAN_FILTERMODE_IDMASK;  // ±êÊ¶·ûÆÁ±ÎÎ»Ä£Ê½
-  can_filter.FilterScale = CAN_FILTERSCALE_32BIT;		//¹ýÂËÆ÷Î»¿íÎªµ¥¸ö32Î»
-  can_filter.FilterIdHigh = 0;//±êÊ¶·û¼Ä´æÆ÷ 
-  can_filter.FilterIdLow  = 0;//±êÊ¶·û¼Ä´æÆ÷ 
-  can_filter.FilterMaskIdHigh = 0;//ÆÁ±Î¼Ä´æÆ÷
-  can_filter.FilterMaskIdLow  = 0;       //ÆÁ±Î¼Ä´æÆ÷   set mask 0 to receive all can id
-  can_filter.FilterFIFOAssignment = CAN_RX_FIFO0; // assign to fifo0£¬½ÓÊÕÆ÷ÊÇFIFO0
+  can_filter.FilterMode =  CAN_FILTERMODE_IDMASK;  // ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»Ä£Ê½
+  can_filter.FilterScale = CAN_FILTERSCALE_32BIT;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½32Î»
+  can_filter.FilterIdHigh = 0;//ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ 
+  can_filter.FilterIdLow  = 0;//ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ 
+  can_filter.FilterMaskIdHigh = 0;//ï¿½ï¿½ï¿½Î¼Ä´ï¿½ï¿½ï¿½
+  can_filter.FilterMaskIdLow  = 0;       //ï¿½ï¿½ï¿½Î¼Ä´ï¿½ï¿½ï¿½   set mask 0 to receive all can id
+  can_filter.FilterFIFOAssignment = CAN_RX_FIFO0; // assign to fifo0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½FIFO0
   can_filter.FilterActivation = ENABLE;           // enable can filter
   can_filter.SlaveStartFilterBank  = 14;          // only meaningful in dual can mode
    
   HAL_CAN_ConfigFilter(hcan, &can_filter);        // init can filter
-	HAL_CAN_Start(&hcan1);//Æô¶¯can£¬·â×°ÔÚcan_user_init()ÀïÁË
-	HAL_CAN_ActivateNotification(&hcan1,CAN_IT_RX_FIFO0_MSG_PENDING);		//Ê¹ÄÜcanµÄFIFO0ÖÐ¶Ï£¬Ò²·â×°ÔÚcan_user_init()ÀïÁË
+	HAL_CAN_Start(&hcan1);//ï¿½ï¿½ï¿½ï¿½canï¿½ï¿½ï¿½ï¿½×°ï¿½ï¿½can_user_init()ï¿½ï¿½ï¿½ï¿½
+	HAL_CAN_ActivateNotification(&hcan1,CAN_IT_RX_FIFO0_MSG_PENDING);		//Ê¹ï¿½ï¿½canï¿½ï¿½FIFO0ï¿½Ð¶Ï£ï¿½Ò²ï¿½ï¿½×°ï¿½ï¿½can_user_init()ï¿½ï¿½ï¿½ï¿½
 }
 
 void can_2_user_init(CAN_HandleTypeDef* hcan )
@@ -37,42 +39,42 @@ void can_2_user_init(CAN_HandleTypeDef* hcan )
   CAN_FilterTypeDef  can_filter;
 
   can_filter.FilterBank = 14;                       // filter 14
-  can_filter.FilterMode =  CAN_FILTERMODE_IDMASK;  // ±êÊ¶·ûÆÁ±ÎÎ»Ä£Ê½
-  can_filter.FilterScale = CAN_FILTERSCALE_32BIT;		//¹ýÂËÆ÷Î»¿íÎªµ¥¸ö32Î»
-  can_filter.FilterIdHigh = 0;//±êÊ¶·û¼Ä´æÆ÷ 
-  can_filter.FilterIdLow  = 0;//±êÊ¶·û¼Ä´æÆ÷ 
-  can_filter.FilterMaskIdHigh = 0;//ÆÁ±Î¼Ä´æÆ÷
-  can_filter.FilterMaskIdLow  = 0;       //ÆÁ±Î¼Ä´æÆ÷   set mask 0 to receive all can id
-  can_filter.FilterFIFOAssignment = CAN_RX_FIFO0; // assign to fifo0£¬½ÓÊÕÆ÷ÊÇFIFO0
+  can_filter.FilterMode =  CAN_FILTERMODE_IDMASK;  // ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»Ä£Ê½
+  can_filter.FilterScale = CAN_FILTERSCALE_32BIT;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½32Î»
+  can_filter.FilterIdHigh = 0;//ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ 
+  can_filter.FilterIdLow  = 0;//ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ 
+  can_filter.FilterMaskIdHigh = 0;//ï¿½ï¿½ï¿½Î¼Ä´ï¿½ï¿½ï¿½
+  can_filter.FilterMaskIdLow  = 0;       //ï¿½ï¿½ï¿½Î¼Ä´ï¿½ï¿½ï¿½   set mask 0 to receive all can id
+  can_filter.FilterFIFOAssignment = CAN_RX_FIFO0; // assign to fifo0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½FIFO0
   can_filter.FilterActivation = ENABLE;           // enable can filter
   can_filter.SlaveStartFilterBank  = 14;          // only meaningful in dual can mode
    
   HAL_CAN_ConfigFilter(hcan, &can_filter);        // init can filter
-	HAL_CAN_Start(&hcan2);//Æô¶¯can£¬·â×°ÔÚcan_user_init()ÀïÁË
-	HAL_CAN_ActivateNotification(&hcan2,CAN_IT_RX_FIFO0_MSG_PENDING);		//Ê¹ÄÜcanµÄFIFO0ÖÐ¶Ï£¬Ò²·â×°ÔÚcan_user_init()ÀïÁË
+	HAL_CAN_Start(&hcan2);//ï¿½ï¿½ï¿½ï¿½canï¿½ï¿½ï¿½ï¿½×°ï¿½ï¿½can_user_init()ï¿½ï¿½ï¿½ï¿½
+	HAL_CAN_ActivateNotification(&hcan2,CAN_IT_RX_FIFO0_MSG_PENDING);		//Ê¹ï¿½ï¿½canï¿½ï¿½FIFO0ï¿½Ð¶Ï£ï¿½Ò²ï¿½ï¿½×°ï¿½ï¿½can_user_init()ï¿½ï¿½ï¿½ï¿½
 }
 
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)//½ÓÊÜÖÐ¶Ï»Øµ÷º¯Êý
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï»Øµï¿½ï¿½ï¿½ï¿½ï¿½
 {
   CAN_RxHeaderTypeDef rx_header;
   if(hcan->Instance == CAN1)
   {
 		HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data); //receive can1 data
 		
-		//YAWÐ£Õý½ÓÊÕ
+		//YAWÐ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if(rx_header.StdId==0x66)
 		{
 			if(rx_data[0] == 0xff)
 			{
 				Update_yaw_flag = 1;
 				HAL_GPIO_TogglePin(GPIOH,GPIO_PIN_12);
-				init_yaw = 0;//»ØÕýËøÔÆÌ¨µÄÖµ
+				init_yaw = 0;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½Öµ
 			}
 		}
 		
 	//	HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data); //receive can1 data
 		if ((rx_header.StdId >= 0x201)//201-207
-   && (rx_header.StdId <  0x207))                  // ÅÐ¶Ï±êÊ¶·û£¬±êÊ¶·ûÎª0x200+ID
+   && (rx_header.StdId <  0x207))                  // ï¿½Ð¶Ï±ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½Îª0x200+ID
   {
     uint8_t index = rx_header.StdId - 0x201;                  // get motor index by can_id
     motor_info[index].rotor_angle    = ((rx_data[0] << 8) | rx_data[1]);
@@ -104,7 +106,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)//½ÓÊÜÖÐ¶Ï»Øµ÷º¯Ê
   {		uint8_t             rx_data[8];
     HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data); //receive can2 data
 		if ((rx_header.StdId >= FEEDBACK_ID_BASE)//201-207
-   && (rx_header.StdId <  FEEDBACK_ID_BASE + MOTOR_MAX_NUM))                  // ÅÐ¶Ï±êÊ¶·û£¬±êÊ¶·ûÎª0x200+ID
+   && (rx_header.StdId <  FEEDBACK_ID_BASE + MOTOR_MAX_NUM))                  // ï¿½Ð¶Ï±ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½Îª0x200+ID
   {
     uint8_t index = rx_header.StdId - FEEDBACK_ID_BASE;                  // get motor index by can_id
     motor_info_can_2[index].rotor_angle    = ((rx_data[0] << 8) | rx_data[1]);
@@ -120,8 +122,8 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)//½ÓÊÜÖÐ¶Ï»Øµ÷º¯Ê
     motor_info[6].torque_current = ((rx_data[4] << 8) | rx_data[5]);
     motor_info[6].temp           =   rx_data[6];
 	}
-	  if ((rx_header.StdId >= FEEDBACK_ID_BASE_6020)//205-211,×¢Òâ°ÑIDµ÷³É´óÓÚ3,²»È»¾Í»áºÍ¶ÁÈ¡3508µÄº¯Êý²úÉú³åÍ»
-   && (rx_header.StdId <  FEEDBACK_ID_BASE_6020 + MOTOR_MAX_NUM))                  // ÅÐ¶Ï±êÊ¶·û£¬±êÊ¶·ûÎª0x204+ID
+	  if ((rx_header.StdId >= FEEDBACK_ID_BASE_6020)//205-211,×¢ï¿½ï¿½ï¿½IDï¿½ï¿½ï¿½É´ï¿½ï¿½ï¿½3,ï¿½ï¿½È»ï¿½Í»ï¿½Í¶ï¿½È¡3508ï¿½Äºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»
+   && (rx_header.StdId <  FEEDBACK_ID_BASE_6020 + MOTOR_MAX_NUM))                  // ï¿½Ð¶Ï±ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½Îª0x204+ID
   {
     uint8_t index = rx_header.StdId - FEEDBACK_ID_BASE_6020;                  // get motor index by can_id
     motor_info_can_2[index].rotor_angle    = ((rx_data[0] << 8) | rx_data[1]);
@@ -130,24 +132,24 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)//½ÓÊÜÖÐ¶Ï»Øµ÷º¯Ê
     motor_info_can_2[index].temp           =   rx_data[6];
 
   }
-	if(rx_header.StdId==0x33)//Ë«C°å´«µÝÒ£¿ØÆ÷ÐÅºÅµÄ½Ó¿Ú±êÊ¶·û
+	if(rx_header.StdId==0x33)//Ë«Cï¿½å´«ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ÅºÅµÄ½Ó¿Ú±ï¿½Ê¶ï¿½ï¿½
 		{
 			can_cnt_2++;
-			if (can_cnt_2 == 100)//ÉÁË¸À¶µÆ´ú±íÒ£¿Ø½ÓÊÕÕý³£Í¨ÐÅ
+			if (can_cnt_2 == 100)//ï¿½ï¿½Ë¸ï¿½ï¿½ï¿½Æ´ï¿½ï¿½ï¿½Ò£ï¿½Ø½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½
 			{
 				can_cnt_2 = 0;
 				HAL_GPIO_TogglePin(GPIOH,GPIO_PIN_10);
 			}
-			rc_ctrl.rc.ch[0] = (rx_data[0] | (rx_data[1] << 8)) & 0x07ff;        //!< Channel 0  ÖÐÖµÎª1024£¬×î´óÖµ1684£¬×îÐ¡Öµ364£¬²¨¶¯·¶Î§£º660
+			rc_ctrl.rc.ch[0] = (rx_data[0] | (rx_data[1] << 8)) & 0x07ff;        //!< Channel 0  ï¿½ï¿½ÖµÎª1024ï¿½ï¿½ï¿½ï¿½ï¿½Öµ1684ï¿½ï¿½ï¿½ï¿½Ð¡Öµ364ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§ï¿½ï¿½660
 			rc_ctrl.rc.ch[1] = (((rx_data[1] >> 3)&0xff) | (rx_data[2] << 5)) & 0x07ff; //!< Channel 1
 			rc_ctrl.rc.ch[2] = (((rx_data[2] >> 6)&0xff) | (rx_data[3] << 2) |          //!< Channel 2
                          (rx_data[4] << 10)) &0x07ff;
 			rc_ctrl.rc.ch[3] = (((rx_data[4] >> 1)&0xff) | (rx_data[5] << 7)) & 0x07ff; //!< Channel 3
-			rc_ctrl.rc.s[0] = ((rx_data[5] >> 4) & 0x0003);                  //!< Switch left£¡£¡£¡ÕâÄáÂêÊÇÓÒ
-			rc_ctrl.rc.s[1] = ((rx_data[5] >> 4) & 0x000C) >> 2;    		//!< Switch right£¡£¡£¡Õâ²ÅÊÇ×ó
+			rc_ctrl.rc.s[0] = ((rx_data[5] >> 4) & 0x0003);                  //!< Switch leftï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			rc_ctrl.rc.s[1] = ((rx_data[5] >> 4) & 0x000C) >> 2;    		//!< Switch rightï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			rc_ctrl.mouse.x = rx_data[6] | (rx_data[7] << 8);                    //!< Mouse X axis
 			}
-		if(rx_header.StdId==0x34)//Ë«C°å´«µÝÒ£¿ØÆ÷ÐÅºÅµÄ½Ó¿Ú±êÊ¶·û
+		if(rx_header.StdId==0x34)//Ë«Cï¿½å´«ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ÅºÅµÄ½Ó¿Ú±ï¿½Ê¶ï¿½ï¿½
 		{
 			rc_ctrl.mouse.y = rx_data[0] | (rx_data[1] << 8);                    //!< Mouse Y axis
 			rc_ctrl.mouse.z = rx_data[2] | (rx_data[3] << 8);                  //!< Mouse Z axis
@@ -157,7 +159,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)//½ÓÊÜÖÐ¶Ï»Øµ÷º¯Ê
 /*			//!< KeyBoard value	
     rc_ctrl.rc.ch[4] = rx_data[16] | (rx_data[17] << 8);                 //NULL
 			*/	}
-		if(rx_header.StdId==0x35)//Ë«C°å´«µÝÒ£¿ØÆ÷ÐÅºÅµÄ½Ó¿Ú±êÊ¶·û
+		if(rx_header.StdId==0x35)//Ë«Cï¿½å´«ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ÅºÅµÄ½Ó¿Ú±ï¿½Ê¶ï¿½ï¿½
 		{
 			
                //NULL
@@ -165,18 +167,24 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)//½ÓÊÜÖÐ¶Ï»Øµ÷º¯Ê
 			memcpy(&yaw_s,&rx_data[2],2);
 			yaw_ss = (float)yaw_s / 100;
 			pitch_ss = (float)pitch_s / 100;
-		//½ÓÊÕµ×ÅÌÐý×ªÁ¿
+		//ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½
 
 			
-		//½ÓÊÕµ×ÅÌimuµÄPitchÊý¾Ý
+		//ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½imuï¿½ï¿½Pitchï¿½ï¿½ï¿½ï¿½
 			errt = (int8_t) rx_data[4];
 			shoot =  (int8_t) rx_data[5];
-			
+			//memcpy((void*)(&muzzle_heat),(const void*)(&rx_data[6]),2);
 		}
+
+    if(rx_header.StdId==0x36)
+    {
+      memcpy((void*)(&muzzle_heat),(const void*)(&rx_data[0]),2);
+      memcpy((void*)(&muzzle_heat_limit),(const void*)(&rx_data[2]),2);
+    }
 		
   }
 
-  if (can_cnt_1 == 500)//ÉÁË¸ºìµÆ´ú±ícanÕý³£Í¨ÐÅ
+  if (can_cnt_1 == 500)//ï¿½ï¿½Ë¸ï¿½ï¿½Æ´ï¿½ï¿½ï¿½canï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½
   {
     can_cnt_1 = 0;
 		HAL_GPIO_TogglePin(GPIOH,GPIO_PIN_12);
@@ -184,13 +192,13 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)//½ÓÊÜÖÐ¶Ï»Øµ÷º¯Ê
   }
 }
 
-void can_remote(uint8_t sbus_buf[],uint32_t id)//µ÷ÓÃcanÀ´·¢ËÍÒ£¿ØÆ÷Êý¾Ý
+void can_remote(uint8_t sbus_buf[],uint32_t id)//ï¿½ï¿½ï¿½ï¿½canï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 {
   CAN_TxHeaderTypeDef tx_header;  
   tx_header.StdId = id;
-  tx_header.IDE   = CAN_ID_STD;//±ê×¼Ö¡
-  tx_header.RTR   = CAN_RTR_DATA;//Êý¾ÝÖ¡
-  tx_header.DLC   = 8;		//·¢ËÍÊý¾Ý³¤¶È£¨×Ö½Ú£©
+  tx_header.IDE   = CAN_ID_STD;//ï¿½ï¿½×¼Ö¡
+  tx_header.RTR   = CAN_RTR_DATA;//ï¿½ï¿½ï¿½ï¿½Ö¡
+  tx_header.DLC   = 8;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½È£ï¿½ï¿½Ö½Ú£ï¿½
 
   HAL_CAN_AddTxMessage(&hcan2, &tx_header, sbus_buf,(uint32_t*)CAN_TX_MAILBOX0);
 }

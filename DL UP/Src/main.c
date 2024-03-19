@@ -199,6 +199,7 @@ int main(void)
 		    DWT_Init(168);
     while (BMI088_init(&hspi1, 1) != BMI088_NO_ERROR)
         ;
+	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_8,GPIO_PIN_SET);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

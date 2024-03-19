@@ -1,12 +1,13 @@
 #include "Yaw_task.h"
 #include "Exchange_task.h"
 #include "stm32f4xx_it.h"
-//	Ë¼Â·£ºÀûÓÃËÙ¶È»·×÷»ù´¡PID·´À¡¸øÔÆÌ¨£¬ÓÃÔÆÌ¨ÍÓÂÝÒÇµÄyawÖµ²»±ä×÷½Ç¶È»·½øÐÐ²¹³¥
-//  ×¢Òâ£ºÔÆÌ¨Íù×ó×ªÊÇ¸ºÊý
-//  ÕâÒ»°æ±¾ÊÇÕë¶ÔÒ£¿ØÆ÷¿ØÖÆµÄ°æ±¾
-//  YAWÖáÊÇ6020µç»ú£¬²ÉÓÃÉÏC°åCAN_1£¬µç»úIDÎª6
+#include "Can_user.h"
+//	Ë¼Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½yawÖµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¶È»ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½
+//  ×¢ï¿½â£ºï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½×ªï¿½Ç¸ï¿½ï¿½ï¿½
+//  ï¿½ï¿½Ò»ï¿½æ±¾ï¿½ï¿½ï¿½ï¿½ï¿½Ò£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆµÄ°æ±¾
+//  YAWï¿½ï¿½ï¿½ï¿½6020ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½CAN_1ï¿½ï¿½ï¿½ï¿½ï¿½IDÎª6
 
-//	¶¨ÒåÒ»Ð©È«¾Ö±äÁ¿
+//	ï¿½ï¿½ï¿½ï¿½Ò»Ð©È«ï¿½Ö±ï¿½ï¿½ï¿½
 extern int16_t mouse_x;
 extern int16_t mouse_y;
 extern pid_struct_t angle_pid;
@@ -27,10 +28,10 @@ fp32 target_angleyaw = 0;
 		extern float yaw_ss,pitch_ss;
 		float angle =0 ;
 fp32 ins_row;
-fp32 init_yaw;	//¼Ç×¡init_yaw³õÖµ
+fp32 init_yaw;	//ï¿½ï¿½×¡init_yawï¿½ï¿½Öµ
 int yaw_model_flag = 1;
-fp32 err_yaw;		//Ëø×¡µÄ½Ç¶È
-fp32 angle_weight = 3;	//½Ç¶È»·->ËÙ¶È»·£¬Ó³ÉäµÄÈ¨ÖØ
+fp32 err_yaw;		//ï¿½ï¿½×¡ï¿½Ä½Ç¶ï¿½
+fp32 angle_weight = 3;	//ï¿½Ç¶È»ï¿½->ï¿½Ù¶È»ï¿½ï¿½ï¿½Ó³ï¿½ï¿½ï¿½È¨ï¿½ï¿½
 fp32 ins_gyro;
 fp32 pitch_target;
 int pitch_send;
@@ -39,7 +40,7 @@ extern Vision_Recv_s recv;
 extern int16_t yaw_s,pitch_s;
 extern int8_t errt;
 extern float yaw_send;
-//Ç°À¡¿ØÖÆ±äÁ¿
+//Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Æ±ï¿½ï¿½ï¿½
 int16_t Rotate_w;
 
 int16_t Rotate_W;
@@ -50,84 +51,85 @@ int yaw_a = 0;
 #define Chassis_R	30.0f
 #define Chassis_r 7.5f//7.5f
 
-#define valve 50		//ãÐÖµ
-#define base 1024		//Ò£¿ØÆ÷µÄ»ØÖÐÖµ
+#define valve 50		//ï¿½ï¿½Öµ
+#define base 1024		//Ò£ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½Öµ
 #define base_max 1684		
 #define base_min 364
-#define angle_valve 1		//½Ç¶ÈãÐÖµ£¬ÔÚÕâ¸ö·¶Î§ÄÚ¾Í²»È¥¶¶¶¯ÁË
+#define angle_valve 1		//ï¿½Ç¶ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§ï¿½Ú¾Í²ï¿½È¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define mouse_x_valve 0.1
 #define mouse_y_valve 0.1
 #define mouse_x_weight 0.5f
 #define Yaw_minipc_valve 1
 #define Yaw_minipc_weight 1.0f
 
-//Ð£ÕýÆ¯ÒÆ±êÖ¾Î»
+//Ð£ï¿½ï¿½Æ¯ï¿½Æ±ï¿½Ö¾Î»
 int8_t Update_yaw_flag = 0;
 
-//¶¨ÒåÒ»Ð©º¯Êý
+//ï¿½ï¿½ï¿½ï¿½Ò»Ð©ï¿½ï¿½ï¿½ï¿½
 float pitch_target_p = 0;
 
-//³õÊ¼»¯PID²ÎÊý
+//ï¿½ï¿½Ê¼ï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½
 static void Yaw_init();	
 
-//Ã¿´ÎÑ­»·³õÊ¼»¯
+//Ã¿ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 static void Yaw_loop_init();
 
-//¶ÁÈ¡imu²ÎÊý
+//ï¿½ï¿½È¡imuï¿½ï¿½ï¿½ï¿½
 static void Yaw_read_imu();
 
-//Ä£Ê½Ñ¡Ôñ
+//Ä£Ê½Ñ¡ï¿½ï¿½
 static void Yaw_choice();
 static void Yaw_angle_choice();
 
-//ÍÓÂÝÒÇËøÔÆÌ¨£¨»ØÖÐ£©
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½
 static void Yaw_fix();
 static void Yaw_tuoluo_fix();
 
-//Mode_1ÏÂµÄ¿ØÖÆËã·¨
+//Mode_1ï¿½ÂµÄ¿ï¿½ï¿½ï¿½ï¿½ã·¨
 static void Yaw_mode_1();
 static void Yaw_angle_mode_1();
 
-//Mode_2ÏÂµÄ¿ØÖÆËã·¨
+//Mode_2ï¿½ÂµÄ¿ï¿½ï¿½ï¿½ï¿½ã·¨
 static void Yaw_mode_2();
 static void Yaw_angle_mode_2();
 
-//Ç°À¡¿ØÖÆ
+//Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 static void Yaw_Rotate();
 
-//Êó±ê¿ØÖÆµþ¼Ó
+//ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½
 static void Yaw_mouse();
 static void Yaw_angle_mouse();
 
-//PID¼ÆËãºÍ·¢ËÍ
+//PIDï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½
 static void Yaw_can_send();
 
-//µþ¼ÓÊÓ¾õ×ÔÃé
+//ï¿½ï¿½ï¿½ï¿½ï¿½Ó¾ï¿½ï¿½ï¿½ï¿½ï¿½
 static void Yaw_minipc_control();
 static void Yaw_angle_init();
-//ÊÓ¾õÇåÁã
+//ï¿½Ó¾ï¿½ï¿½ï¿½ï¿½ï¿½
 static void Yaw_minipc_zero();
 
+uint8_t to_down_c_buf[8]={0,0,0,0,0};
 
 float yaw_err = 0;
 float yaw_n = 0;
 float pitch_n = 0;
 void Yaw_angle_task(void const *pvParameters)
 {
-  //³õÊ¼»¯ÉèÖÃ
+  //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	Yaw_angle_init();
 	pitch_target_p = 0;
 	target_angleyaw= 0;
 
 	
-	//Ñ­»·ÈÎÎñÔËÐÐ
+	//Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   for(;;)
   {
 		Yaw_loop_init();
 		Yaw_read_imu();
-		diy_control();
-		//Ä£Ê½ÅÐ¶Ï,×óÉÏ½Ç¿ª¹Ø¿ªµ½×îÏÂ·½
+		//diy_control();
+		//Ä£Ê½ï¿½Ð¶ï¿½,ï¿½ï¿½ï¿½Ï½Ç¿ï¿½ï¿½Ø¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½
 			Yaw_angle_mode_2();
 		if((rc_ctrl.rc.s[1] == 3||rc_ctrl.rc.s[1] == 2||press_right)&&recv.cheak)
 				{
@@ -137,12 +139,14 @@ void Yaw_angle_task(void const *pvParameters)
 
 		pitch_cal();
 
-
 		angle = (float)motor_info[4].rotor_angle/27;
 		pitch_target_p =- pid_calc1(&motor_pid_gimbal_a[0],pitch_target,INS.Pitch);			
 		pitch_send = pid_calc(&motor_pid_gimbal_s[0], pitch_target_p ,-9.55f*INS.Gyro[0]);
 		
 		Yaw_can_send();
+
+memcpy((void*)&(to_down_c_buf[0]),(const void *)(&motor_info[5].rotor_angle),2);
+can_remote(to_down_c_buf,0x47);
     osDelay(1);
   }
 
@@ -209,15 +213,15 @@ void diy_control()
 		
 		}
 }
-//³õÊ¼»¯PID²ÎÊý
+//ï¿½ï¿½Ê¼ï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½
 static void Yaw_init()	
 {
-	//idÎªcan1µÄ5ºÅ
+	//idÎªcan1ï¿½ï¿½5ï¿½ï¿½
 	pid_init(&motor_pid[5],85,3,40,15000,15000);//85,7,5//110,1,40,15000,15000
 }
 static void Yaw_angle_init()	
 {
-	//idÎªcan1µÄ5ºÅ
+	//idÎªcan1ï¿½ï¿½5ï¿½ï¿½
 	pid_init(&motor_pid[5],700,5,0,15000,20000);//85,7,5//110,1,40,15000,15000
 	pid_init(&angle_pid,5,0,10,15000,20000);//85,7,5//110,1,40,15000,15000
 //		pid_init(&motor_pid[5],300,3,0,15000,20000);//85,7,5//110,1,40,15000,15000
@@ -232,24 +236,24 @@ pid_init(&motor_pid_gimbal_s[0],400,5,0,15000,30000);//85,7,5//110,1,40,15000,15
 }
 
 
-//Ñ­»·³õÊ¼»¯
+//Ñ­ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 static void Yaw_loop_init()
 {
 	target_speed[5]=0;
 }
 
 
-//¶ÁÈ¡imu²ÎÊý
+//ï¿½ï¿½È¡imuï¿½ï¿½ï¿½ï¿½
 static void Yaw_read_imu()
 {
-		//Èý¸ö½Ç¶ÈÖµ¶ÁÈ¡
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Ç¶ï¿½Öµï¿½ï¿½È¡
 		ins_yaw = ins_data.angle[0];
 		ins_pitch = ins_data.angle[1];
 		ins_row = ins_data.angle[2];
 	  ins_gyro=ins_data.gyro[0];
 
 		
-		//Ð£Õý
+		//Ð£ï¿½ï¿½
 		ins_yaw_update = ins_yaw ;
 }
 
@@ -261,11 +265,11 @@ static void Yaw_can_send()
   uint8_t             tx_data[8];
 	
 //	tx_header.StdId = 0x1ff;
-//  tx_header.IDE   = CAN_ID_STD;//±ê×¼Ö¡
-//  tx_header.RTR   = CAN_RTR_DATA;//Êý¾ÝÖ¡
-//  tx_header.DLC   = 8;		//·¢ËÍÊý¾Ý³¤¶È£¨×Ö½Ú£©
+//  tx_header.IDE   = CAN_ID_STD;//ï¿½ï¿½×¼Ö¡
+//  tx_header.RTR   = CAN_RTR_DATA;//ï¿½ï¿½ï¿½ï¿½Ö¡
+//  tx_header.DLC   = 8;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½È£ï¿½ï¿½Ö½Ú£ï¿½
 
-//	tx_data[0] = (pitch_send>>8)&0xff;	//ÏÈ·¢¸ß°ËÎ»		
+//	tx_data[0] = (pitch_send>>8)&0xff;	//ï¿½È·ï¿½ï¿½ß°ï¿½Î»		
 //  tx_data[1] = (pitch_send)&0xff;
 //  tx_data[2] = 0x00;	
 //  tx_data[3] = 0x00;//pitch_send
@@ -278,11 +282,11 @@ static void Yaw_can_send()
 //	motor_info[5].set_voltage = 30000;
 	
 	tx_header.StdId = 0x1ff;
-  tx_header.IDE   = CAN_ID_STD;//±ê×¼Ö¡
-  tx_header.RTR   = CAN_RTR_DATA;//Êý¾ÝÖ¡
-  tx_header.DLC   = 8;		//·¢ËÍÊý¾Ý³¤¶È£¨×Ö½Ú£©
+  tx_header.IDE   = CAN_ID_STD;//ï¿½ï¿½×¼Ö¡
+  tx_header.RTR   = CAN_RTR_DATA;//ï¿½ï¿½ï¿½ï¿½Ö¡
+  tx_header.DLC   = 8;		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½È£ï¿½ï¿½Ö½Ú£ï¿½
 
-	tx_data[0] = (pitch_send>>8)&0xff;//ÏÈ·¢¸ß°ËÎ»		
+	tx_data[0] = (pitch_send>>8)&0xff;//ï¿½È·ï¿½ï¿½ß°ï¿½Î»		
   tx_data[1] = (pitch_send)&0xff;
   tx_data[2] =(motor_info[5].set_voltage>>8)&0xff;	
   tx_data[3] = (motor_info[5].set_voltage)&0xff;//pitch_send
@@ -299,30 +303,30 @@ static void Yaw_Rotate()
 	Rotate_W = (Rotate_gain * Rotate_w * Chassis_r) / Chassis_R;
 	target_speed[5]+=Rotate_W;
 }
-//ÍÓÂÝÒÇËøÔÆÌ¨
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨
 static void Yaw_fix()
 {
-	//Ò£¸Ð»ØÖÐËøÔÆÌ¨(Ò»°ã»ØÖÐËø)
-					if(yaw_model_flag == 1)		//ÒÆ¶¯ÔÆÌ¨ºóÖØÐÂ¼Ç×¡ÔÆÌ¨µÄ³õÊ¼Î»ÖÃµÄÖµ
+	//Ò£ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨(Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+					if(yaw_model_flag == 1)		//ï¿½Æ¶ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½×¡ï¿½ï¿½Ì¨ï¿½Ä³ï¿½Ê¼Î»ï¿½Ãµï¿½Öµ
 					{
 						init_yaw = ins_yaw_update;
 						yaw_model_flag = 0;
 					}
-						err_yaw = ins_yaw_update - init_yaw;		//ÓÃÊµÊ±Êý¾Ý¼õ³õÊ¼Êý¾Ý
+						err_yaw = ins_yaw_update - init_yaw;		//ï¿½ï¿½ÊµÊ±ï¿½ï¿½ï¿½Ý¼ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
 					
-					//Ô½½ç´¦Àí,±£Ö¤×ª¶¯·½Ïò²»±ä
-					if(err_yaw < -180)	//	Ô½½çÊ±£º180 -> -180
+					//Ô½ï¿½ç´¦ï¿½ï¿½,ï¿½ï¿½Ö¤×ªï¿½ï¿½ï¿½ï¿½ï¿½ò²»±ï¿½
+					if(err_yaw < -180)	//	Ô½ï¿½ï¿½Ê±ï¿½ï¿½180 -> -180
 					{
 						err_yaw += 360;
 					}
 					
-					else if(err_yaw > 180)	//	Ô½½çÊ±£º-180 -> 180
+					else if(err_yaw > 180)	//	Ô½ï¿½ï¿½Ê±ï¿½ï¿½-180 -> 180
 					{
 						err_yaw -= 360;
 					}
 				
 					
-					//ãÐÖµÅÐ¶Ï
+					//ï¿½ï¿½Öµï¿½Ð¶ï¿½
 					if(err_yaw > angle_valve || err_yaw < -angle_valve)
 					{
 						target_speed[5] -= err_yaw * angle_weight;
@@ -336,8 +340,8 @@ static void Yaw_fix()
 }
 static void Yaw_angle_fix()
 {
-	//Ò£¸Ð»ØÖÐËøÔÆÌ¨(Ò»°ã»ØÖÐËø)
-					if(yaw_model_flag == 1)		//ÒÆ¶¯ÔÆÌ¨ºóÖØÐÂ¼Ç×¡ÔÆÌ¨µÄ³õÊ¼Î»ÖÃµÄÖµ
+	//Ò£ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨(Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+					if(yaw_model_flag == 1)		//ï¿½Æ¶ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½×¡ï¿½ï¿½Ì¨ï¿½Ä³ï¿½Ê¼Î»ï¿½Ãµï¿½Öµ
 					{
 						init_yaw = ins_yaw_update;
 						yaw_model_flag = 0;
@@ -345,21 +349,21 @@ static void Yaw_angle_fix()
 					err_yaw = ins_yaw_update - init_yaw;
 						
 					
-					if(err_yaw < -180)	//	Ô½½çÊ±£º180 -> -180
+					if(err_yaw < -180)	//	Ô½ï¿½ï¿½Ê±ï¿½ï¿½180 -> -180
 					{
 						err_yaw += 360;
 					}
 					
-					else if(err_yaw > 180)	//	Ô½½çÊ±£º-180 -> 180
+					else if(err_yaw > 180)	//	Ô½ï¿½ï¿½Ê±ï¿½ï¿½-180 -> 180
 					{
 						err_yaw -= 360;
 					}
 				
 					
-					//ãÐÖµÅÐ¶Ï
+					//ï¿½ï¿½Öµï¿½Ð¶ï¿½
 					if(err_yaw > angle_valve || err_yaw < -angle_valve)
 					{
-						target_angleyaw = init_yaw;		//ÓÃÊµÊ±Êý¾Ý¼õ³õÊ¼Êý¾Ý
+						target_angleyaw = init_yaw;		//ï¿½ï¿½ÊµÊ±ï¿½ï¿½ï¿½Ý¼ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
 					}
 					
 					else
@@ -370,27 +374,27 @@ static void Yaw_angle_fix()
 }
 static void Yaw_tuoluo_fix()
 {
-	//Ò£¸Ð»ØÖÐËøÔÆÌ¨(Ò»°ã»ØÖÐËø)
-					if(yaw_model_flag == 1)		//ÒÆ¶¯ÔÆÌ¨ºóÖØÐÂ¼Ç×¡ÔÆÌ¨µÄ³õÊ¼Î»ÖÃµÄÖµ
+	//Ò£ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨(Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+					if(yaw_model_flag == 1)		//ï¿½Æ¶ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½×¡ï¿½ï¿½Ì¨ï¿½Ä³ï¿½Ê¼Î»ï¿½Ãµï¿½Öµ
 					{
 						init_yaw = ins_yaw_update;
 						yaw_model_flag = 0;
 					}
-						err_yaw = ins_yaw_update - init_yaw;		//ÓÃÊµÊ±Êý¾Ý¼õ³õÊ¼Êý¾Ý
+						err_yaw = ins_yaw_update - init_yaw;		//ï¿½ï¿½ÊµÊ±ï¿½ï¿½ï¿½Ý¼ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
 					
-					//Ô½½ç´¦Àí,±£Ö¤×ª¶¯·½Ïò²»±ä
-					if(err_yaw < -180)	//	Ô½½çÊ±£º180 -> -180
+					//Ô½ï¿½ç´¦ï¿½ï¿½,ï¿½ï¿½Ö¤×ªï¿½ï¿½ï¿½ï¿½ï¿½ò²»±ï¿½
+					if(err_yaw < -180)	//	Ô½ï¿½ï¿½Ê±ï¿½ï¿½180 -> -180
 					{
 						err_yaw += 360;
 					}
 					
-					else if(err_yaw > 180)	//	Ô½½çÊ±£º-180 -> 180
+					else if(err_yaw > 180)	//	Ô½ï¿½ï¿½Ê±ï¿½ï¿½-180 -> 180
 					{
 						err_yaw -= 360;
 					}
 				
 					
-					//ãÐÖµÅÐ¶Ï
+					//ï¿½ï¿½Öµï¿½Ð¶ï¿½
 					if(err_yaw > angle_valve || err_yaw < -angle_valve)
 					{
 						target_speed[5] -= err_yaw * 2;
@@ -434,7 +438,7 @@ static void Yaw_mode_1()
 				{
 					Yaw_fix();
 				}
-				//²»»ØÖÐµÄÊ±ºò¿ÉÒÔÒÆ¶¯ÔÆÌ¨
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Ì¨
 				else if( (rc_ctrl.rc.ch[2] >= base+valve && rc_ctrl.rc.ch[2] <= base_max) || (e_flag))
 				{
 					target_speed[5] -= 120;
@@ -449,7 +453,7 @@ static void Yaw_mode_1()
 				{
 					
 				}
-				//²»»ØÖÐµÄÊ±ºò¿ÉÒÔÒÆ¶¯ÔÆÌ¨
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Ì¨
 				else if( (rc_ctrl.rc.ch[3] >= base+valve && rc_ctrl.rc.ch[3] <= base_max) || (e_flag))
 				{
 					pitch_target -= 120;
@@ -462,7 +466,7 @@ static void Yaw_mode_1()
 				}
 				
 				Yaw_mouse();
-				//ÓÒ¼ü´¥·¢×ÔÃé
+				//ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				if(press_right)
 				{
 					Yaw_minipc_control();
@@ -477,7 +481,7 @@ static void Yaw_angle_mode_1()
 				{
 					Yaw_angle_fix();
 				}
-				//²»»ØÖÐµÄÊ±ºò¿ÉÒÔÒÆ¶¯ÔÆÌ¨
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Ì¨
 				else if( (rc_ctrl.rc.ch[2] >= base+valve && rc_ctrl.rc.ch[2] <= base_max) || (e_flag))
 				{
 					target_angleyaw -= 0.3;//da
@@ -492,7 +496,7 @@ static void Yaw_angle_mode_1()
 				{
 					
 				}
-				//²»»ØÖÐµÄÊ±ºò¿ÉÒÔÒÆ¶¯ÔÆÌ¨
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Ì¨
 				else if( (rc_ctrl.rc.ch[3] >= base+valve && rc_ctrl.rc.ch[3] <= base_max) || (e_flag))
 				{
 					pitch_target -= 0.3;
@@ -505,7 +509,7 @@ static void Yaw_angle_mode_1()
 				}
 				
 				Yaw_angle_mouse();
-				//ÓÒ¼ü´¥·¢×ÔÃé
+				//ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				if(press_right)
 				{
 					Yaw_minipc_control();
@@ -532,7 +536,7 @@ static void Yaw_mode_2()
 		yaw_model_flag = 1;
 	}
 	Yaw_mouse();
-					//ÓÒ¼ü´¥·¢×ÔÃé
+					//ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if(press_right)
 	{
 		Yaw_minipc_control();
@@ -563,7 +567,7 @@ static void Yaw_angle_mode_2()
 				{
 					
 				}
-				//²»»ØÖÐµÄÊ±ºò¿ÉÒÔÒÆ¶¯ÔÆÌ¨
+				//ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½Ì¨
 				else if( (rc_ctrl.rc.ch[3] >= base+valve && rc_ctrl.rc.ch[3] <= base_max) || (e_flag))
 				{
 					pitch_target -= 0.3;
@@ -575,13 +579,13 @@ static void Yaw_angle_mode_2()
 					
 				}
 	Yaw_angle_mouse();
-					//ÓÒ¼ü´¥·¢×ÔÃé
+					//ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 
 }
 
-//ÏÂ½µÑÓ´¥·¢
+//ï¿½Â½ï¿½ï¿½Ó´ï¿½ï¿½ï¿½
 static void Yaw_choice()
 {
 	if(r_flag)
@@ -629,7 +633,7 @@ static void Yaw_minipc_control()
 		yaw_model_flag = 1;
 		//target_angleyaw = yaw_send;
 	target_angleyaw = recv.yaw;
-		pitch_target = recv.pitch;
+		pitch_target = recv.pitch+1;
 		
 	
 }

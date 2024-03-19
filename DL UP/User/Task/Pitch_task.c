@@ -10,21 +10,21 @@
 #include "Exchange_task.h"
 #include "exchange.h"
 
-//´ËÈÎÎñÓÃÀ´¶ÔÔÆÌ¨½øÐÐÄ£Ê½Ñ¡Ôñ£¬¿ØÖÆ£¬Ð£×¼µÈ
-//·â×°Ò»Ð©º¯ÊýÓÃÀ´½øÐÐ¿ØÖÆµ÷ÓÃ
-//Pitch²ÉÓÃÉÏC°åCAN_2£¬µç»úIDÎª5
-//´æÔÚÎÊÌâ£ºÐèÒª½«ÔÆÌ¨PitchËøÔÚ×îÏÂ·½ÔÙÆô¶¯£¬PitchÊÜ¸ßÆµÔëµãÓ°Ïì£¬ÊÕÁ²ËÙ¶ÈÌ«Âý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½Ä£Ê½Ñ¡ï¿½ñ£¬¿ï¿½ï¿½Æ£ï¿½Ð£×¼ï¿½ï¿½
+//ï¿½ï¿½×°Ò»Ð©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Æµï¿½ï¿½ï¿½
+//Pitchï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½CAN_2ï¿½ï¿½ï¿½ï¿½ï¿½IDÎª5
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â£ºï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ì¨Pitchï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Pitchï¿½Ü¸ï¿½Æµï¿½ï¿½ï¿½Ó°ï¿½ì£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½Ì«ï¿½ï¿½
 
-//¶¨ÒåÒ»Ð©±äÁ¿
-//ÏÞÎ»²ÎÊý£¨»úÐµ²âÁ¿£©
+//ï¿½ï¿½ï¿½ï¿½Ò»Ð©ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define Up_inf 2
-#define Down_inf -34
+#define Down_inf -2
 #define mouse_y_valve 15
 #define mouse_y_weight 10.0f
 #define Pitch_minipc_valve 1
 #define Pitch_minipc_weight	100.0f
 
-//imuÊý¾Ý
+//imuï¿½ï¿½ï¿½ï¿½
 fp32 Err_pitch;
 int16_t Up_pitch;
 int16_t Down_pitch;
@@ -33,34 +33,34 @@ uint8_t Remember_pitch_flag = 1;
 extern ins_data_t ins_data;
 extern int16_t mouse_y;
 int Pitcherror = 0;
-//³õÊ¼»¯PID²ÎÊý
+//ï¿½ï¿½Ê¼ï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½
 static void gimbal_init();	
 
-//Ð£ÑéÁ¬½Ó³É¹¦
+//Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ó³É¹ï¿½
 static bool gimbal_judge();	
 
-//¶ÁÈ¡imu²ÎÊý
+//ï¿½ï¿½È¡imuï¿½ï¿½ï¿½ï¿½
 static void gimbal_read_imu();
 
-//Ä£Ê½Ñ¡Ôñ
+//Ä£Ê½Ñ¡ï¿½ï¿½
 static void gimbal_choice();
 
-//Mode_1ÏÂµÄ¿ØÖÆËã·¨
+//Mode_1ï¿½ÂµÄ¿ï¿½ï¿½ï¿½ï¿½ã·¨
 static void gimbal_mode_1();
 
-//PID¼ÆËãºÍ·¢ËÍ
+//PIDï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½
 static void gimbal_can_send();
 
-//ÏÞÎ»£¨Ïà¶ÔÍÓÂÝÒÇÊý¾Ý£©
+//ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½
 static void gimbal_imu_limit();
 
-//·´×ªÏÞÎ»
+//ï¿½ï¿½×ªï¿½ï¿½Î»
 static void gimbal_imu_limit_2();
 
-//Êó±ê¿ØÖÆPitch(µþ¼Ó)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Pitch(ï¿½ï¿½ï¿½ï¿½)
 static void gimbal_mouse();
 
-//µþ¼Ó×ÔÃé
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 static void gimbal_minipc_control();
 // pitch
 
@@ -78,7 +78,7 @@ void Pitch_task(void const * argument)
 			gimbal_mode_1();
 			gimbal_mouse();
 			
-			//ÓÒ¼üÆô¶¯×ÔÃé
+			//ï¿½Ò¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	  	if(press_right)
 		 {
 		  	gimbal_minipc_control();
@@ -92,40 +92,40 @@ void Pitch_task(void const * argument)
   /* USER CODE END StartTask02 */
 }
 
-//³õÊ¼»¯PID²ÎÊý
+//ï¿½ï¿½Ê¼ï¿½ï¿½PIDï¿½ï¿½ï¿½ï¿½
 static void gimbal_init()	
 {
 		pid_init(&motor_pid_can_2[4],18,0.1,5,1900,1900);
 }
 
 
-//Ð£ÑéÁ¬½Ó³É¹¦
+//Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ó³É¹ï¿½
 static bool gimbal_judge()
 {
 
 }
 
 
-//¶ÁÈ¡imu²ÎÊý
+//ï¿½ï¿½È¡imuï¿½ï¿½ï¿½ï¿½
 static void gimbal_read_imu()
 {
-	//»ñÈ¡Down_pitch(Ð´ÔÚÁËcanµÄ½ÓÊÕº¯ÊýÀïÃæ)
+	//ï¿½ï¿½È¡Down_pitch(Ð´ï¿½ï¿½ï¿½ï¿½canï¿½Ä½ï¿½ï¿½Õºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 	
-	//ÉÏ-ÏÂ
+	//ï¿½ï¿½-ï¿½ï¿½
 	Up_pitch = (int)ins_data.angle[1];
-	Err_pitch = Down_pitch - Up_pitch ;//ÏÂ-ÉÏÎªÕýÖµ
+	Err_pitch = Down_pitch - Up_pitch ;//ï¿½ï¿½-ï¿½ï¿½Îªï¿½ï¿½Öµ
 	Err_pitch += Remember_pitch;
 }
 
 
-//Ä£Ê½Ñ¡Ôñ
+//Ä£Ê½Ñ¡ï¿½ï¿½
 static void gimbal_choice()
 {
 
 }
 
 
-//Mode_1Ëã·¨£¬×î¼òµ¥µÄÔÆÌ¨¿ØÖÆ£¨ËÙ¶È»·£©
+//Mode_1ï¿½ã·¨ï¿½ï¿½ï¿½ï¿½òµ¥µï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½Æ£ï¿½ï¿½Ù¶È»ï¿½ï¿½ï¿½
 static void gimbal_mode_1()
 {
 		if( rc_ctrl.rc.ch[1]>1074&&rc_ctrl.rc.ch[1]<=1684  )
@@ -142,7 +142,7 @@ static void gimbal_mode_1()
 		}
 }	
 
-//PID¼ÆËãºÍ·¢ËÍ
+//PIDï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½
 static void gimbal_can_send()
 {
 		
@@ -156,7 +156,7 @@ static void gimbal_can_send()
 }
 
 
-//ÍÓÂÝÒÇÏÞÎ»£¨Ïà¶Ô£©,Í£Ö¹ÏÞÎ»
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½Ô£ï¿½,Í£Ö¹ï¿½ï¿½Î»
 static void gimbal_imu_limit()
 {
 	gimbal_read_imu();
@@ -171,7 +171,7 @@ static void gimbal_imu_limit()
 	}
 }
 
-//·´×ªÏÞÎ»·¨
+//ï¿½ï¿½×ªï¿½ï¿½Î»ï¿½ï¿½
 static void gimbal_imu_limit_2()
 {
 	gimbal_read_imu();
@@ -186,7 +186,7 @@ static void gimbal_imu_limit_2()
 	}
 }
 
-//Êó±ê¿ØÖÆ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 static void gimbal_mouse()
 {
 	if(mouse_y > mouse_y_valve || mouse_y < -mouse_y_valve)
@@ -195,7 +195,7 @@ static void gimbal_mouse()
 	}
 }
 
-//×ÔÃé
+//ï¿½ï¿½ï¿½ï¿½
 static void gimbal_minipc_control()
 {
 	if(Pitch_minipc > Pitch_minipc_valve || Pitch_minipc < -Pitch_minipc_valve)
