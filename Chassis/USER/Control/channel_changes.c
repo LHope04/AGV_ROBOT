@@ -51,7 +51,7 @@ float Vcx;
 float Vcy;
 float Vdx;
 float Vdy;
-
+extern uint16_t Hero_chassis_power_limit;
 //将3508和6020运动模式结合，形成底盘控制
 
 /********************************************************底盘平移控制********************************************************/
@@ -106,6 +106,25 @@ void translational_control()
 
 }
 extern float data[6];
+void power_mit()
+{
+	float p6020 = 0;
+	float p3508 = 0;
+	float p3508_p = 0;
+	for(int i = 0;i<4;i++)
+  {p6020 += fabs(output_6020[i]/25000*25 * motor[i+4].tor_current/16384*3);
+	}
+	for(int i = 0;i<4;i++)
+  {p3508 += fabs(output_3508[i]/16384*3 * 24);
+	}
+	for(int i = 0;i<4;i++)
+  {
+p3508_p = fabs(pid_cal_s(&PID_speed_3508[i],	Hero_chassis_power_limit-p6020-5,Hero_chassis_power,Max_out_s,Max_iout_s));
+	}
+	float kpp = p3508_p/p3508;
+	
+
+}
 static void Chassis_Power_Limit(double Chassis_pidout_target_limit)
 {	
 	//819.2/A，假设最大功率为120W，那么能够通过的最大电流为5A，取一个保守值：800.0 * 5 = 4000
@@ -143,13 +162,18 @@ static void Chassis_Power_Limit(double Chassis_pidout_target_limit)
 		else if(Klimit < -1) Klimit = -1;//限制绝对值不能超过1，也就是Chassis_pidout一定要小于某个速度值，不能超调
 
 		/*缓冲能量占比环，总体约束*/
-		if(Watch_Buffer<50&&Watch_Buffer>=40)	Plimit=0.9;		//近似于以一个线性来约束比例（为了保守可以调低Plimit，但会影响响应速度）
-		else if(Watch_Buffer<40&&Watch_Buffer>=35)	Plimit=0.75;
-		else if(Watch_Buffer<35&&Watch_Buffer>=30)	Plimit=0.5;
-		else if(Watch_Buffer<30&&Watch_Buffer>=20)	Plimit=0.3;
-		else if(Watch_Buffer<20&&Watch_Buffer>=10)	Plimit=0.25;
-		else if(Watch_Buffer<10&&Watch_Buffer>=0)	Plimit=0.1;
-		else {Plimit=1;}
+//		if(Watch_Buffer<50&&Watch_Buffer>=40)	Plimit=0.9;		//近似于以一个线性来约束比例（为了保守可以调低Plimit，但会影响响应速度）
+//		else if(Watch_Buffer<40&&Watch_Buffer>=35)	Plimit=0.75;
+//		else if(Watch_Buffer<35&&Watch_Buffer>=30)	Plimit=0.5;
+//		else if(Watch_Buffer<30&&Watch_Buffer>=20)	Plimit=0.3;
+//		else if(Watch_Buffer<20&&Watch_Buffer>=10)	Plimit=0.25;
+//		else if(Watch_Buffer<10&&Watch_Buffer>=0)	Plimit=0.1;
+//		else {Plimit=1;}
+		Plimit = 0.5;
+		float pppp = (Hero_chassis_power_buffer-(Hero_chassis_power_limit-Hero_chassis_power)*0.01);
+		float ppout = pid_cal_s(&PID_speed_3508[0],	20,pppp,Max_out_s,Max_iout_s);
+		Plimit += ppout;
+		if(Plimit<0)Plimit=0;
 //				if(data[1]<24&&data[1]>23)	Plimit=0.9;		//近似于以一个线性来约束比例（为了保守可以调低Plimit，但会影响响应速度）
 //		else if(data[1]<23&&data[1]>22)	Plimit=0.8;
 //		else if(data[1]<22&&data[1]>20)	Plimit=0.7;
