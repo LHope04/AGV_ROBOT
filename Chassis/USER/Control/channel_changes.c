@@ -125,6 +125,7 @@ p3508_p = fabs(pid_cal_s(&PID_speed_3508[i],	Hero_chassis_power_limit-p6020-5,He
 	
 
 }
+extern pidTypeDef Power;
 static void Chassis_Power_Limit(double Chassis_pidout_target_limit)
 {	
 	//819.2/A，假设最大功率为120W，那么能够通过的最大电流为5A，取一个保守值：800.0 * 5 = 4000
@@ -162,18 +163,19 @@ static void Chassis_Power_Limit(double Chassis_pidout_target_limit)
 		else if(Klimit < -1) Klimit = -1;//限制绝对值不能超过1，也就是Chassis_pidout一定要小于某个速度值，不能超调
 
 		/*缓冲能量占比环，总体约束*/
-//		if(Watch_Buffer<50&&Watch_Buffer>=40)	Plimit=0.9;		//近似于以一个线性来约束比例（为了保守可以调低Plimit，但会影响响应速度）
-//		else if(Watch_Buffer<40&&Watch_Buffer>=35)	Plimit=0.75;
-//		else if(Watch_Buffer<35&&Watch_Buffer>=30)	Plimit=0.5;
-//		else if(Watch_Buffer<30&&Watch_Buffer>=20)	Plimit=0.3;
-//		else if(Watch_Buffer<20&&Watch_Buffer>=10)	Plimit=0.25;
-//		else if(Watch_Buffer<10&&Watch_Buffer>=0)	Plimit=0.1;
-//		else {Plimit=1;}
-		Plimit = 0.5;
-		float pppp = (Hero_chassis_power_buffer-(Hero_chassis_power_limit-Hero_chassis_power)*0.01);
-		float ppout = pid_cal_s(&PID_speed_3508[0],	20,pppp,Max_out_s,Max_iout_s);
-		Plimit += ppout;
-		if(Plimit<0)Plimit=0;
+		if(Watch_Buffer<50&&Watch_Buffer>=40)	Plimit=0.8;		//近似于以一个线性来约束比例（为了保守可以调低Plimit，但会影响响应速度）
+		else if(Watch_Buffer<40&&Watch_Buffer>=35)	Plimit=0.7;
+		else if(Watch_Buffer<35&&Watch_Buffer>=30)	Plimit=0.5;
+		else if(Watch_Buffer<30&&Watch_Buffer>=20)	Plimit=0.3;
+		else if(Watch_Buffer<20&&Watch_Buffer>=10)	Plimit=0.25;
+		else if(Watch_Buffer<10&&Watch_Buffer>=0)	Plimit=0.1;
+		else {Plimit=1;}
+//		float kpp = pid_cal_s(&Power,Hero_chassis_power,Hero_chassis_power_limit,Max_out_s,Max_iout_s);
+//		Plimit = 0.5+kpp;
+//		float pppp = (Hero_chassis_power_buffer-(Hero_chassis_power_limit-Hero_chassis_power)*0.01);
+//		float ppout = pid_cal_s(&PID_speed_3508[0],pppp,20,Max_out_s,Max_iout_s);
+//		Plimit += ppout;
+//		if(Plimit<0)Plimit=0;
 //				if(data[1]<24&&data[1]>23)	Plimit=0.9;		//近似于以一个线性来约束比例（为了保守可以调低Plimit，但会影响响应速度）
 //		else if(data[1]<23&&data[1]>22)	Plimit=0.8;
 //		else if(data[1]<22&&data[1]>20)	Plimit=0.7;
@@ -480,7 +482,7 @@ omega = 20;
 
 	
 	
-	Chassis_Power_Limit(20000);
+	Chassis_Power_Limit(40000);
 	
 
 	can_cmd_send_6020(output_6020[0],output_6020[1],output_6020[2],output_6020[3]);

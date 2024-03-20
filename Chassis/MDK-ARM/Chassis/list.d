@@ -1,8 +1,8 @@
 chassis\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/list.c
-chassis\list.o: F:\keil\ARM\ARMCC\Bin\..\include\stdlib.h
+chassis\list.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdlib.h
 chassis\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-chassis\list.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-chassis\list.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+chassis\list.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stddef.h
+chassis\list.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdint.h
 chassis\list.o: ../Core/Inc/FreeRTOSConfig.h
 chassis\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 chassis\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

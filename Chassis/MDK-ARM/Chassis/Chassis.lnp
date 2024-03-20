@@ -1,4 +1,4 @@
---cpu=Cortex-M4.fp
+--cpu=Cortex-M4.fp.sp
 "chassis\startup_stm32f407xx.o"
 "chassis\main.o"
 "chassis\gpio.o"
@@ -59,6 +59,7 @@
 "chassis\chassis.o"
 "chassis\yaw_task.o"
 "chassis\nrf24l01.o"
+"chassis\ui_task.o"
 "chassis\bmi088driver.o"
 "chassis\bmi088middleware.o"
 "chassis\bsp_delay.o"

@@ -1,7 +1,7 @@
 chassis\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c
 chassis\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
-chassis\port.o: F:\keil\ARM\ARMCC\Bin\..\include\stddef.h
-chassis\port.o: F:\keil\ARM\ARMCC\Bin\..\include\stdint.h
+chassis\port.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stddef.h
+chassis\port.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdint.h
 chassis\port.o: ../Core/Inc/FreeRTOSConfig.h
 chassis\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
 chassis\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h

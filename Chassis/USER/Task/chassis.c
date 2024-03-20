@@ -34,9 +34,10 @@ extern int omega;
 uint16_t initial_angle[4];
 int16_t Max_out_a = 20000;
 int16_t Max_iout_a = 20000;
-int16_t Max_out_s = 1; //电压控制转速，电流控制扭矩
-int16_t Max_iout_s = 1;
+int16_t Max_out_s = 20000; //电压控制转速，电流控制扭矩
+int16_t Max_iout_s = 20000;
 pidTypeDef PID_angle[4];
+pidTypeDef Power;
 pidTypeDef PID_speed_3508[4];
 pidTypeDef PID_speed_6020[4];
 extern fp32 yaw_err ;
@@ -61,6 +62,7 @@ void Chassis(void const * argument)
 	float PID_s[3] = {10,0.05,0};
 	float PID_a[3] = {35,0,3};
 	float PID[3] = {0.1,0.0001,0};
+	float pow[3] = {0.1,0.0001,0};
 	
 	int m = 0;
 	
@@ -69,6 +71,7 @@ void Chassis(void const * argument)
 		pid_init(&PID_angle[i],PID_a[0],PID_a[1],PID_a[2]);
 		pid_init(&PID_speed_3508[i],PID[0],PID[1],PID[2]);
 	}
+	pid_init(&Power,pow[0],pow[1],pow[2]);
 	USBD_CDC_SetRxBuffer(&axy,Buf1);
   for(;;)
   {

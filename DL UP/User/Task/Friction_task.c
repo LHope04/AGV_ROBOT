@@ -106,22 +106,27 @@ void danger_mode()
 		{target_speed[2] = -400*36;
 		}
 				if(rc_ctrl.rc.s[1] == 1&&rc_ctrl.rc.s[0] == 3)
-		{target_speed[2] = -200*36;
+		{target_speed[2] = -100*36;
 		}
 }
  void ifdanger()
 {
-	if(motor_info[2].torque_current> 8000)
+//	if(motor_info[2].torque_current> 8000)
+//	{
+//		target_speed[2] = -50*36;
+//		motor_info[2].set_voltage = pid_calc(&motor_pid[2], target_speed[2], motor_info[2].rotor_speed);
+//	}
+		if(c_flag)
 	{
-		target_speed[2] = -50*36;
+		target_speed[2] = 10*36;
 		motor_info[2].set_voltage = pid_calc(&motor_pid[2], target_speed[2], motor_info[2].rotor_speed);
 	}
 
-	else if(motor_info[2].torque_current<-8000)
-	{
-		target_speed[2] = 50*36;
-		motor_info[2].set_voltage = pid_calc(&motor_pid[2], target_speed[2], motor_info[2].rotor_speed);
-	}
+//	else if(motor_info[2].torque_current<-8000)
+//	{
+//		target_speed[2] = 50*36;
+//		motor_info[2].set_voltage = pid_calc(&motor_pid[2], target_speed[2], motor_info[2].rotor_speed);
+//	}
 		else
 	{
 		motor_info[2].set_voltage = pid_calc(&motor_pid[2], target_speed[2], motor_info[2].rotor_speed);
@@ -130,7 +135,7 @@ void danger_mode()
 }
 static void trigger_init()
 {
-		pid_init(&trigger_pid[2], 2,  0, 1, 16384, 16384);	
+		pid_init(&trigger_pid[2], 10,  0.3, 1, 16384, 16384);	
 	
 		
 		
@@ -138,8 +143,8 @@ static void trigger_init()
 static void friction_enable()
 {
 
-		target_speed[0] = -19*430;//-8700
-    target_speed[1] =  19*430;// 8700
+		target_speed[0] = -19*400;//-8700
+    target_speed[1] =  19*400;// 8700
 	
 		motor_info[0].set_voltage = pid_calc(&motor_pid[0], target_speed[0], motor_info[0].rotor_speed);
     motor_info[1].set_voltage = pid_calc(&motor_pid[1], target_speed[1], motor_info[1].rotor_speed);
@@ -162,7 +167,7 @@ static void model_choice()
 {
 	//friction_flag_change(); //ׁȡдݼˇرдЂ
 	//if(friction_flag||rc_ctrl.rc.s[0] == 1)
-	if(rc_ctrl.rc.s[1] == 3||rc_ctrl.rc.s[1] == 2||rc_ctrl.rc.s[0] == 1)
+	if(rc_ctrl.rc.s[1] == 3||rc_ctrl.rc.s[1] == 1||rc_ctrl.rc.s[0] == 1)
 	{
 		friction_enable();
 	}
@@ -212,7 +217,7 @@ static void trigger_task()
 	{
 		if(m2006_angle_flag<5)
 		{
-			target_speed[2] = -200*36;
+			target_speed[2] = -80*36;
 		}
 		else
 		{
@@ -229,7 +234,7 @@ static void trigger_task()
 	
 	if(shoot_continue==1)      //lʤ
 	{
-		target_speed[2] = -200*36;
+		target_speed[2] = -80*36;
 		m2006_angle_flag=0;
 	}
 	else if(shoot_continue==2) //ͣת
@@ -251,7 +256,7 @@ static void trigger_mode_choose()
 	
 	
     //判断按压时长
-	if((press_time > 0 && press_time < 1000)) //短按
+	if((press_time > 0 && press_time < 250)) //短按
 	{
 		if( rc_ctrl.mouse.press_l ==0 )
 		{
@@ -260,7 +265,7 @@ static void trigger_mode_choose()
 		}
 	}
 	
-	if(press_time > 1000)//长按
+	if(press_time > 250)//长按
 	{		
         	//设置发射状态为连发
 			shoot_continue = 1;
@@ -275,7 +280,7 @@ static void trigger_mode_choose()
 	}
 	else if(rc_ctrl.mouse.press_l==0)//松开鼠标
 	{ 
-		if(press_time > 1000 ) 
+		if(press_time > 250 ) 
 		 {
              //计数清0
       		 press_time = 0;
