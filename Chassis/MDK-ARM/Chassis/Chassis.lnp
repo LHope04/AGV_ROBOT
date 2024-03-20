@@ -55,6 +55,7 @@
 "chassis\user_can.o"
 "chassis\drv_usart.o"
 "chassis\user_pid.o"
+"chassis\bsp_usart.o"
 "chassis\channel_changes.o"
 "chassis\chassis.o"
 "chassis\yaw_task.o"
@@ -75,6 +76,8 @@
 "chassis\usbd_ctlreq.o"
 "chassis\usbd_ioreq.o"
 "chassis\usbd_cdc.o"
+"chassis\referee_task.o"
+"chassis\referee_ui.o"
 --library_type=microlib --strict --scatter "Chassis\Chassis.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

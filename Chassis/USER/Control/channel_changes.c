@@ -6,6 +6,7 @@
 #include "user_can.h"
 #include "user_pid.h"
 #include "NRF24L01.h"
+#include "judge.h"
 #include "math.h"
 extern RC_ctrl_t rc_ctrl;
 extern uint16_t initial_angle[4];
@@ -215,7 +216,7 @@ extern int8_t shoot,xtl;
 extern float error_theta;
 int val[4] = {0,0,0,0};
 float pi1 = 0;
-
+extern JUDGE_MODULE_DATA Judge_Hero;
 float last_angle_6020[4] = {0,0,0,0};
 
 //低通滤波：
@@ -402,7 +403,7 @@ flagxtl = 1;
 //		{
 //			omega = 14;
 //		}
-omega = 20;
+omega = 26;
 	vxd = rc_ctrl.rc.ch[0]*4;
 	vyd = rc_ctrl.rc.ch[1]*4;
 		//error_theta = 0;
@@ -470,17 +471,16 @@ omega = 20;
 		}// (10.150   330 10)验证过程
 		speed_6020[i] = pid_cal_a(&PID_angle[i],get_6020[i],motor_angle[i],Max_out_a,Max_iout_a); 
 		output_6020[i] = pid_cal_s(&PID_speed_6020[i],motor[i+4].speed,speed_6020[i],Max_out_s,Max_iout_s);
-		output_6020[i] = rcLfFiter(output_6020[i],val[i]);
+		//output_6020[i] = rcLfFiter(output_6020[i],val[i]);
 		val[i] = output_6020[i];
 		last_angle_6020[i] = motor_angle[i];
-		
-		if((fabs(get_6020[i]-motor_angle[i]))<5 && flagxtl ==0)
+		if(Judge_Hero.robot_status.power_management_chassis_output == 0)
 		{
 		output_6020[i] = 0;
 		}
 	}
 
-	
+	//((fabs(get_6020[i]-motor_angle[i]))<5 && flagxtl ==0)||
 	
 	Chassis_Power_Limit(40000);
 	

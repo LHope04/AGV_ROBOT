@@ -73,7 +73,6 @@ typedef struct
  * @param referee_usart_handle 串口handle,C板一般用串口6
  * @return referee_info_t* 返回裁判系统反馈的数据,包括热量/血量/状态等
  */
-referee_info_t *RefereeInit(UART_HandleTypeDef *referee_usart_handle);
 
 /**
  * @brief UI绘制和交互数的发送接口,由UI绘制任务和多机通信函数调用
@@ -82,6 +81,6 @@ referee_info_t *RefereeInit(UART_HandleTypeDef *referee_usart_handle);
  * @param send 发送数据首地址
  * @param tx_len 发送长度
  */
-void RefereeSend(uint8_t *send, uint16_t tx_len);
+
 
 #endif // !REFEREE_H

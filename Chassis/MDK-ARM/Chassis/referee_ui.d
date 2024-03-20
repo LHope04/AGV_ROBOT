@@ -55,3 +55,5 @@ chassis\referee_ui.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wra
 chassis\referee_ui.o: C:\Keil_v5\ARM\Installer\Bin\..\include\string.h
 chassis\referee_ui.o: ../USER/CRC.h
 chassis\referee_ui.o: ../USER/struct_typedef.h
+chassis\referee_ui.o: ../USER/DriverLayer/bsp_usart.h
+chassis\referee_ui.o: C:\Keil_v5\ARM\Installer\Bin\..\include\stdlib.h

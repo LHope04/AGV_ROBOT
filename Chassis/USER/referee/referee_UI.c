@@ -12,9 +12,15 @@
 #include "string.h"
 #include "CRC.h"
 #include "stdio.h"
-#include "rm_referee.h"
 #include "stdarg.h"
+#include "bsp_usart.h"
+static USART_Instance *referee_usart_instance; // 裁判系统串口实例
+void RefereeSend(uint8_t *send, uint16_t tx_len)
+{
+	HAL_UART_Transmit_DMA(&huart6, send, tx_len);
 
+	osDelay(115);
+}
 // 包序号
 /********************************************删除操作*************************************
 **参数：_id 对应的id结构体
@@ -43,6 +49,7 @@ void UIDelete(referee_id_t *_id, uint8_t Del_Operate, uint8_t Del_Layer)
 	UI_delete_data.frametail = Get_CRC16_Check_Sum((uint8_t *)&UI_delete_data, LEN_HEADER + LEN_CMDID + temp_datalength, 0xFFFF);
 	/* 填入0xFFFF,关于crc校验 */
 
+	
 	RefereeSend((uint8_t *)&UI_delete_data, LEN_HEADER + LEN_CMDID + temp_datalength + LEN_TAIL); // 发送
 
 	UI_Seq++; // 包序号+1
@@ -423,3 +430,5 @@ void UICharRefresh(referee_id_t *_id, String_Data_t string_Data)
 
 	UI_Seq++; // 包序号+1
 }
+
+

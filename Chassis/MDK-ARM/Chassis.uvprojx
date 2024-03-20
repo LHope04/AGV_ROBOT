@@ -2038,6 +2038,11 @@
                 </FileArmAds>
               </FileOption>
             </File>
+            <File>
+              <FileName>bsp_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\DriverLayer\bsp_usart.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3195,6 +3200,18 @@
         </Group>
         <Group>
           <GroupName>New Group</GroupName>
+          <Files>
+            <File>
+              <FileName>referee_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\referee\referee_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>referee_UI.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USER\referee\referee_UI.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>

@@ -54,4 +54,6 @@ chassis\channel_changes.o: ../USER/DriverLayer/user_can.h
 chassis\channel_changes.o: ../USER/DriverLayer/user_pid.h
 chassis\channel_changes.o: ../Core/Inc/NRF24L01.h
 chassis\channel_changes.o: ../Core/Inc/gpio.h
+chassis\channel_changes.o: ../USER/PotocaLayer/judge.h
+chassis\channel_changes.o: ../USER/DriverLayer/drv_usart.h
 chassis\channel_changes.o: C:\Keil_v5\ARM\Installer\Bin\..\include\math.h
